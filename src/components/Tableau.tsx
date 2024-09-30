@@ -1,15 +1,20 @@
-import TableauColumn from "./TableauColumn"
+import { TableauColumns } from "../utils/types";
+import TableauColumn from "./TableauColumn";
 
-export default function Tableau () {
-    return (
-        <div className="flex flex-row justify-around p-2 gap-2 mx-10">
-        <TableauColumn />
-        <TableauColumn />
-        <TableauColumn />
-        <TableauColumn />
-        <TableauColumn />
-        <TableauColumn />
-        <TableauColumn />
-        </div>
-    )
+type TableauProps = {
+  columns: TableauColumns;
+};
+
+export default function Tableau({ columns }: TableauProps) {
+  return (
+    <div className="flex flex-row justify-around p-2 gap-2 mx-10">
+      {Object.keys(columns).map((columnNo) => {
+                const columnIndex = Number(columnNo) as keyof TableauColumns;
+
+        return (
+            <TableauColumn key={columnNo} cards={columns[columnIndex]}/>
+        );
+      })}
+    </div>
+  );
 }

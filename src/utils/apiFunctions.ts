@@ -8,7 +8,17 @@ type GetNewStockPileResponseTypes = {
     cards: PlayingCard[]
 }
 
+async function getNewFullDeck(deckId: string): Promise<PileOfCards> {
+    const response = await fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=52`)
 
+    if (!response.ok) {
+        throw new Error("Error getting stock pile")
+    }
+
+    const data: GetNewStockPileResponseTypes = await response.json()
+    const { cards } = data
+    return  cards
+}
 
 async function getNewDeck(): Promise<string> {
     const response = await fetch("https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1")
@@ -22,17 +32,7 @@ async function getNewDeck(): Promise<string> {
     return deck_id
 }
 
-async function getNewStockPile(deckId: string): Promise<PileOfCards> {
-    const response = await fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=24`)
-    // console.log(response)
 
-    if (!response.ok) {
-        throw new Error("Error getting stock pile")
-    }
 
-    const data: GetNewStockPileResponseTypes = await response.json()
-    const { cards } = data
-    return  cards
-}
 
-export { getNewDeck, getNewStockPile }
+export { getNewDeck, getNewFullDeck }
