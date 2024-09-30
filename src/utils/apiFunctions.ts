@@ -24,6 +24,7 @@ async function getNewDeck(): Promise<string> {
 
 async function getNewStockPile(deckId: string): Promise<PileOfCards> {
     const response = await fetch(`https://deckofcardsapi.com/api/deck/${deckId}/draw/?count=24`)
+    // console.log(response)
 
     if (!response.ok) {
         throw new Error("Error getting stock pile")

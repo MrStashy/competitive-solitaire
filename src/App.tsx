@@ -10,24 +10,26 @@ import { PileOfCards } from './utils/types'
 function App() {
   const [deckId, setDeckId] = useState<string>("")
   const [stockPile, setStockPile ] = useState<PileOfCards>([])
+  const [dealt, setDealt] = useState<boolean>(false)
 
   async function handleNewGameClick() {
       const newDeckId = await getNewDeck()
       setDeckId(newDeckId)
-
-      dealCards()
   }
 
   async function dealCards() {
     const newStockPile = await getNewStockPile(deckId)
-    
     setStockPile(newStockPile)
-    console.log(stockPile)
+    setDealt(true)
+  }
+
+  if (deckId && !dealt) {
+    dealCards()
   }
 
   return (
    <PlayingBoard>
-    <TopRow />
+    <TopRow stockPile={stockPile} />
     <Tableau />
     <ControlModule handleNewGameClick={handleNewGameClick}/>
    </PlayingBoard>
