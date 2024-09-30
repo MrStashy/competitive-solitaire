@@ -1,11 +1,13 @@
 import './App.css'
+import PlayingBoard from './components/PlayingBoard'
+import TopRow from './components/TopRow'
 
 function App() {
 
   return (
-    <>
-<p className="text-blue-500">Build</p>
-    </>
+   <PlayingBoard>
+    <TopRow />
+   </PlayingBoard>
   )
 }
 
