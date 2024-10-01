@@ -9,7 +9,7 @@ type TopRowProps = {
 
 export default function TopRow({ stockPile }: TopRowProps) {
   return (
-    <header className="flex flex-row justify-between p-2">
+    <header className="flex flex-row justify-between p-2 h-36">
       <div className="flex flex-row gap-2">
         <Stock stockPile={stockPile} />
         <WastePile />

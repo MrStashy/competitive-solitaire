@@ -6,6 +6,8 @@ import ControlModule from "./components/ControlModule";
 import { getNewDeck, getNewFullDeck } from "./utils/apiFunctions";
 import { useState } from "react";
 import { PileOfCards, TableauColumns } from "./utils/types";
+import {DndContext} from '@dnd-kit/core';
+
 
 function App() {
   const [gameDeck, setDeck] = useState<PileOfCards>([]);
@@ -59,7 +61,6 @@ function App() {
       newColumns[i] = currentColumn;
     }
     setColumns(newColumns);
-
     setDealt(true);
   }
 
@@ -68,11 +69,13 @@ function App() {
   }
 
   return (
+    <DndContext>
     <PlayingBoard>
       <TopRow stockPile={stockPile} />
       <Tableau columns={columns} />
       <ControlModule handleNewGameClick={handleNewGameClick} />
     </PlayingBoard>
+    </DndContext>
   );
 }
 
