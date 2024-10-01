@@ -5,12 +5,16 @@ type CardProps = {
   card: PlayingCard;
   tableau: boolean;
   index: number;
+  columnNo: number;
 };
 
-export default function Card({ card, tableau, index }: CardProps) {
+export default function Card({ card, tableau, index, columnNo }: CardProps) {
+
+  const dragId = `${card.code}-${columnNo ?? 0}`
+
 
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
-        id: card.code,
+        id: dragId
       });
     
       const style = {

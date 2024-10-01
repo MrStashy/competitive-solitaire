@@ -7,6 +7,7 @@ import { getNewDeck, getNewFullDeck } from "./utils/apiFunctions";
 import { useState } from "react";
 import { PileOfCards, TableauColumns } from "./utils/types";
 import { DndContext } from '@dnd-kit/core';
+import { DragEndEvent } from "@dnd-kit/core";
 
 
 function App() {
@@ -32,15 +33,7 @@ function App() {
   function dealCards() {
     const deckCopy: PileOfCards = [...gameDeck];
     const newStockPile: PileOfCards = [];
-    const newColumns: TableauColumns = {
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-      7: [],
-    };
+    const newColumns: TableauColumns = {};
 
     for (let i = 0; i < 24; i++) {
       const card = deckCopy.shift();
@@ -68,8 +61,31 @@ function App() {
     dealCards();
   }
 
+  function handleDragEnd(event: DragEndEvent) {
+    const {active, over} = event
+    let cardCode: string = ''
+    let originatingCol: string = ''
+    let destinationCol: string = ''
+    const columnsCopy: TableauColumns = {}
+
+    if (over) {
+      destinationCol = over.id.toString()
+    } else {
+      return
+    }
+
+    if (typeof active.id === 'string') {
+      [cardCode, originatingCol] = active.id.split('-');
+    }
+
+    for (let i = 1; i < 8; i++) {
+      columnsCopy[i] = [...columns[i]]
+    }
+
+  }
+
   return (
-    <DndContext>
+    <DndContext onDragEnd={handleDragEnd}>
     <PlayingBoard>
       <TopRow stockPile={stockPile} />
       <Tableau columns={columns} />
@@ -78,5 +94,7 @@ function App() {
     </DndContext>
   );
 }
+
+
 
 export default App;

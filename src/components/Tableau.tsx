@@ -12,7 +12,7 @@ export default function Tableau({ columns }: TableauProps) {
                 const columnIndex = Number(columnNo) as keyof TableauColumns;
 
         return (
-            <TableauColumn key={columnNo} cards={columns[columnIndex]}/>
+            <TableauColumn key={columnNo} columnNo={Number(columnNo)} cards={columns[columnIndex]}/>
         );
       })}
     </div>

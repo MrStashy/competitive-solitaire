@@ -12,11 +12,5 @@ export type PlayingCard = {
 export type PileOfCards = PlayingCard[]
 
 export type TableauColumns = {
-    1: PileOfCards
-    2: PileOfCards
-    3: PileOfCards
-    4: PileOfCards
-    5: PileOfCards
-    6: PileOfCards
-    7: PileOfCards
+ [key: number]: PileOfCards
 }
