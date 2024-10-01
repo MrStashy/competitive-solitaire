@@ -6,7 +6,7 @@ import ControlModule from "./components/ControlModule";
 import { getNewDeck, getNewFullDeck } from "./utils/apiFunctions";
 import { useState } from "react";
 import { PileOfCards, TableauColumns } from "./utils/types";
-import {DndContext} from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
 
 
 function App() {
