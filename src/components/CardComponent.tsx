@@ -31,7 +31,7 @@ export default function Card({ card, tableau, index, columnNo }: CardProps) {
       <div
         ref={setNodeRef}
         style={style}
-        className="relative"
+        className="relative min-h-[5px]"
         {...listeners}
         {...attributes}
       >

@@ -67,7 +67,7 @@ function App() {
   function handleDragEnd(event: DragEndEvent) {
     const {active, over} = event
     let draggedCardCode: string = ''
-    let originatingColNum: string = ''
+    let originatingCol: string = ''
     let destinationColNum: string = ''
     let draggedCardColourIsBlack: boolean = false
     let destinationCardColourIsBlack: boolean = false
@@ -75,38 +75,38 @@ function App() {
     let destinationCardRank: number = 0
     const columnsCopy: TableauColumns = {}
 
-    if (over) {
-      destinationColNum = over.id.toString()
-    } else {
-      return
-    }
+    console.log(over)
 
     for (let i = 1; i < 8; i++) {
       columnsCopy[i] = [...columns[i]]
     }
 
     if (typeof active.id === 'string') {
-      [draggedCardCode, originatingColNum] = active.id.split('-');
+      [draggedCardCode, originatingCol] = active.id.split('-');
     }
 
-    draggedCardRank = rankMap[draggedCardCode[0]]
-    if(draggedCardCode[1] === 'C' || draggedCardCode[1] === 'S') {
-      draggedCardColourIsBlack = true
-    } 
+    const draggedCardRef = columnsCopy[Number(originatingCol)].find((card) => card.code === draggedCardCode)
 
-    const destinationCol = columnsCopy[Number(destinationColNum)]
-    const destinationCardCode = destinationCol[destinationCol.length - 1].code
-    if(destinationCardCode[1] === 'C' || destinationCardCode[1] === 'S') {
-      destinationCardColourIsBlack = true
-    } 
-    destinationCardRank = rankMap[destinationCardCode[0]]
+    console.log(draggedCardRef)
 
-    if (destinationCardRank - draggedCardRank === 1 && draggedCardColourIsBlack !== destinationCardColourIsBlack) {
-       const removedCard = columnsCopy[Number(originatingColNum)].pop()
-       if(removedCard) {
-        destinationCol.push(removedCard)
-       }
-    }
+    // draggedCardRank = rankMap[draggedCardCode[0]]
+    // if(draggedCardCode[1] === 'C' || draggedCardCode[1] === 'S') {
+    //   draggedCardColourIsBlack = true
+    // } 
+
+    // const destinationCol = columnsCopy[Number(destinationColNum)]
+    // const destinationCardCode = destinationCol[destinationCol.length - 1].code
+    // if(destinationCardCode[1] === 'C' || destinationCardCode[1] === 'S') {
+    //   destinationCardColourIsBlack = true
+    // } 
+    // destinationCardRank = rankMap[destinationCardCode[0]]
+
+    // if (destinationCardRank - draggedCardRank === 1 && draggedCardColourIsBlack !== destinationCardColourIsBlack) {
+    //    const removedCard = columnsCopy[Number(originatingColNum)].pop()
+    //    if(removedCard) {
+    //     destinationCol.push(removedCard)
+    //    }
+    // }
 
     setColumns(columnsCopy)
   }
