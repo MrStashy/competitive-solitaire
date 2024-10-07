@@ -9,6 +9,7 @@ import { useState } from "react";
 import { PileOfCards, TableauColumns } from "./utils/types";
 import { DndContext } from '@dnd-kit/core';
 import { DragEndEvent } from "@dnd-kit/core";
+import markColumnGroups from "./utils/markColumnGroups";
 
 
 function App() {
@@ -52,8 +53,9 @@ function App() {
           currentColumn.push(card);
         }
       }
-      newColumns[i] = currentColumn;
+      newColumns[i] = markColumnGroups(currentColumn);
     }
+    console.log(newColumns)
     setColumns(newColumns);
     setDealt(true);
   }
@@ -113,7 +115,7 @@ function App() {
     <DndContext onDragEnd={handleDragEnd}>
     <PlayingBoard>
       <TopRow stockPile={stockPile} />
-      <Tableau columns={columns} />
+      <Tableau columns={columns}/>
       <ControlModule handleNewGameClick={handleNewGameClick} />
     </PlayingBoard>
     </DndContext>

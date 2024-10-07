@@ -8,6 +8,7 @@ export type PlayingCard = {
     value: string
     suit: string
     groupSize: number
+    draggableGroup: PileOfCards
 }
 
 export type PileOfCards = PlayingCard[]
