@@ -7,6 +7,7 @@ export type PlayingCard = {
     }
     value: string
     suit: string
+    groupSize: number
 }
 
 export type PileOfCards = PlayingCard[]

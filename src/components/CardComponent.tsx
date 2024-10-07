@@ -10,6 +10,10 @@ type CardProps = {
 
 export default function Card({ card, tableau, index, columnNo }: CardProps) {
 
+  if (card.groupSize) {
+    console.log(card.groupSize)
+  }
+
   const dragId = `${card.code}-${columnNo ?? 0}`
 
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
