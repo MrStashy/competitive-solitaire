@@ -12,7 +12,6 @@ export default function Card({ card, tableau, index, columnNo }: CardProps) {
 
   const dragId = `${card.code}-${columnNo ?? 0}`
 
-
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: dragId
       });

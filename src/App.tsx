@@ -3,6 +3,7 @@ import PlayingBoard from "./components/PlayingBoard";
 import TopRow from "./components/TopRow";
 import Tableau from "./components/Tableau";
 import ControlModule from "./components/ControlModule";
+import rankMap from "./utils/cardRankMap";
 import { getNewDeck, getNewFullDeck } from "./utils/apiFunctions";
 import { useState } from "react";
 import { PileOfCards, TableauColumns } from "./utils/types";
@@ -63,25 +64,49 @@ function App() {
 
   function handleDragEnd(event: DragEndEvent) {
     const {active, over} = event
-    let cardCode: string = ''
-    let originatingCol: string = ''
-    let destinationCol: string = ''
+    let draggedCardCode: string = ''
+    let originatingColNum: string = ''
+    let destinationColNum: string = ''
+    let draggedCardColourIsBlack: boolean = false
+    let destinationCardColourIsBlack: boolean = false
+    let draggedCardRank: number = 0
+    let destinationCardRank: number = 0
     const columnsCopy: TableauColumns = {}
 
     if (over) {
-      destinationCol = over.id.toString()
+      destinationColNum = over.id.toString()
     } else {
       return
-    }
-
-    if (typeof active.id === 'string') {
-      [cardCode, originatingCol] = active.id.split('-');
     }
 
     for (let i = 1; i < 8; i++) {
       columnsCopy[i] = [...columns[i]]
     }
 
+    if (typeof active.id === 'string') {
+      [draggedCardCode, originatingColNum] = active.id.split('-');
+    }
+
+    draggedCardRank = rankMap[draggedCardCode[0]]
+    if(draggedCardCode[1] === 'C' || draggedCardCode[1] === 'S') {
+      draggedCardColourIsBlack = true
+    } 
+
+    const destinationCol = columnsCopy[Number(destinationColNum)]
+    const destinationCardCode = destinationCol[destinationCol.length - 1].code
+    if(destinationCardCode[1] === 'C' || destinationCardCode[1] === 'S') {
+      destinationCardColourIsBlack = true
+    } 
+    destinationCardRank = rankMap[destinationCardCode[0]]
+
+    if (destinationCardRank - draggedCardRank === 1 && draggedCardColourIsBlack !== destinationCardColourIsBlack) {
+       const removedCard = columnsCopy[Number(originatingColNum)].pop()
+       if(removedCard) {
+        destinationCol.push(removedCard)
+       }
+    }
+
+    setColumns(columnsCopy)
   }
 
   return (
