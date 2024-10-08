@@ -5,9 +5,14 @@ type StockProps = {
 };
 
 export default function Stock({ stockPile }: StockProps) {
+  const style = stockPile.length ? "w-[100px]" : "border w-[100px]"
+
   if (stockPile.length) {
-    return <img src={'https://www.deckofcardsapi.com/static/img/back.png'} className="" />;
+    return <img src={'https://www.deckofcardsapi.com/static/img/back.png'} className={style} />;
   }
 
-  return <p className="border">Stockpile</p>;
+  return (
+    <div className={style}>
+    </div>
+  )
 }

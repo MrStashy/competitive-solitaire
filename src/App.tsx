@@ -15,6 +15,7 @@ import markRevealedCards from "./utils/markRevealedCards";
 function App() {
   const [gameDeck, setDeck] = useState<PileOfCards>([]);
   const [stockPile, setStockPile] = useState<PileOfCards>([]);
+  const [wastePile, setWastePile] = useState<PileOfCards>([])
   const [dealt, setDealt] = useState<boolean>(false);
   const [columns, setColumns] = useState<TableauColumns>({
     1: [],
@@ -142,7 +143,7 @@ function App() {
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <PlayingBoard>
-        <TopRow stockPile={stockPile} />
+        <TopRow stockPile={stockPile} wastePile={wastePile}/>
         <Tableau columns={columns} handleTableauColClick={handleTableauColClick}/>
         <ControlModule handleNewGameClick={handleNewGameClick} />
       </PlayingBoard>
