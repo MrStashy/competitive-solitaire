@@ -24,7 +24,7 @@ export default function Card({ card, tableau, index, columnNo }: CardProps) {
     zIndex: isDragging ? 1000 : "auto",
   };
 
-  if (isDragging && card.draggableGroup.length) {
+  if (isDragging && card.draggableGroup?.length) {
     const cardsToRender = [card, ...card.draggableGroup];
 
     return (

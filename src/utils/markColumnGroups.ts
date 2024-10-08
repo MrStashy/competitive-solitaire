@@ -2,7 +2,7 @@ import { PileOfCards } from "./types";
 import rankMap from "./cardRankMap";
 
 export default function markColumnGroups(column: PileOfCards) {
-  if (column.length <= 1) {
+  if (column.length < 1) {
     return column;
   }
 

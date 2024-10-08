@@ -6,11 +6,10 @@ import ControlModule from "./components/ControlModule";
 import rankMap from "./utils/cardRankMap";
 import { getNewDeck, getNewFullDeck } from "./utils/apiFunctions";
 import { useState } from "react";
-import { PileOfCards, TableauColumns } from "./utils/types";
-import { DndContext } from '@dnd-kit/core';
+import { PileOfCards, PlayingCard, TableauColumns } from "./utils/types";
+import { DndContext } from "@dnd-kit/core";
 import { DragEndEvent } from "@dnd-kit/core";
 import markColumnGroups from "./utils/markColumnGroups";
-
 
 function App() {
   const [gameDeck, setDeck] = useState<PileOfCards>([]);
@@ -55,7 +54,6 @@ function App() {
       }
       newColumns[i] = markColumnGroups(currentColumn);
     }
-    console.log(newColumns)
     setColumns(newColumns);
     setDealt(true);
   }
@@ -65,63 +63,78 @@ function App() {
   }
 
   function handleDragEnd(event: DragEndEvent) {
-    const {active, over} = event
-    let draggedCardCode: string = ''
-    let originatingCol: string = ''
-    let destinationColNum: string = ''
-    let draggedCardColourIsBlack: boolean = false
-    let destinationCardColourIsBlack: boolean = false
-    let draggedCardRank: number = 0
-    let destinationCardRank: number = 0
-    const columnsCopy: TableauColumns = {}
+    const { active, over } = event;
+    const columnsCopy: TableauColumns = {};
+    let draggedCardCode = "";
+    let originatingColNum = "";
+    let destinationColNum = "";
+    let originatingCol: PileOfCards = [];
+    let destinationCol: PileOfCards = [];
+    let draggedCardRank = 0;
+    let draggedCardIsBlack = false;
+    let destinationCard: PlayingCard;
+    let destinationCardRank = 0;
+    let destinationCardIsBlack = false;
+    let numOfDraggedCards = 0;
+    let draggedCardIndex = 0
 
-    console.log(over)
+    if (!over) {
+      return;
+    } else {
+      destinationColNum = over.id.toString();
+    }
 
     for (let i = 1; i < 8; i++) {
-      columnsCopy[i] = [...columns[i]]
+      columnsCopy[i] = [...columns[i]];
     }
 
-    if (typeof active.id === 'string') {
-      [draggedCardCode, originatingCol] = active.id.split('-');
+    if (typeof active.id === "string") {
+      [draggedCardCode, originatingColNum] = active.id.split("-");
+      draggedCardRank = rankMap[draggedCardCode[0]];
+      originatingCol = columnsCopy[Number(originatingColNum)];
+      draggedCardIsBlack =
+        draggedCardCode[1] === "C" || draggedCardCode[1] === "S";
     }
 
-    const draggedCardRef = columnsCopy[Number(originatingCol)].find((card) => card.code === draggedCardCode)
 
-    console.log(draggedCardRef)
+    destinationCol = columnsCopy[Number(destinationColNum)];
 
-    // draggedCardRank = rankMap[draggedCardCode[0]]
-    // if(draggedCardCode[1] === 'C' || draggedCardCode[1] === 'S') {
-    //   draggedCardColourIsBlack = true
-    // } 
+    if(destinationCol.length > 0) {
+      destinationCard = destinationCol[destinationCol.length - 1];
+      destinationCardRank = rankMap[destinationCard.code[0]];
+      destinationCardIsBlack =
+        destinationCard.code[1] === "S" || destinationCard.code[1] === "C";
+    }
+    
 
-    // const destinationCol = columnsCopy[Number(destinationColNum)]
-    // const destinationCardCode = destinationCol[destinationCol.length - 1].code
-    // if(destinationCardCode[1] === 'C' || destinationCardCode[1] === 'S') {
-    //   destinationCardColourIsBlack = true
-    // } 
-    // destinationCardRank = rankMap[destinationCardCode[0]]
+    const draggedCard = originatingCol.find((card) => card.code === draggedCardCode)
+    if (draggedCard) {
+      numOfDraggedCards = draggedCard.draggableGroup.length + 1
+      draggedCardIndex = originatingCol.indexOf(draggedCard)
+    } 
+    const allDraggedCards = originatingCol.splice(draggedCardIndex, numOfDraggedCards)
 
-    // if (destinationCardRank - draggedCardRank === 1 && draggedCardColourIsBlack !== destinationCardColourIsBlack) {
-    //    const removedCard = columnsCopy[Number(originatingColNum)].pop()
-    //    if(removedCard) {
-    //     destinationCol.push(removedCard)
-    //    }
-    // }
+    if (draggedCardIsBlack !== destinationCardIsBlack && destinationCardRank - draggedCardRank === 1 || destinationCol.length === 0 && draggedCardRank === 13) {
+      const newDestinationColArr = destinationCol.concat(allDraggedCards)
+      columnsCopy[Number(destinationColNum)] = newDestinationColArr
+    }
 
-    setColumns(columnsCopy)
+    for (let i = 1; i < 8; i++) {
+      markColumnGroups(columnsCopy[i])
+    }
+    
+    setColumns(columnsCopy);
   }
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-    <PlayingBoard>
-      <TopRow stockPile={stockPile} />
-      <Tableau columns={columns}/>
-      <ControlModule handleNewGameClick={handleNewGameClick} />
-    </PlayingBoard>
+      <PlayingBoard>
+        <TopRow stockPile={stockPile} />
+        <Tableau columns={columns} />
+        <ControlModule handleNewGameClick={handleNewGameClick} />
+      </PlayingBoard>
     </DndContext>
   );
 }
-
-
 
 export default App;
