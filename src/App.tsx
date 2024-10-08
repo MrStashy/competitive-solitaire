@@ -7,9 +7,10 @@ import rankMap from "./utils/cardRankMap";
 import { getNewDeck, getNewFullDeck } from "./utils/apiFunctions";
 import { useState } from "react";
 import { PileOfCards, PlayingCard, TableauColumns } from "./utils/types";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragStartEvent } from "@dnd-kit/core";
 import { DragEndEvent } from "@dnd-kit/core";
 import markColumnGroups from "./utils/markColumnGroups";
+import markRevealedCards from "./utils/markRevealedCards";
 
 function App() {
   const [gameDeck, setDeck] = useState<PileOfCards>([]);
@@ -52,9 +53,10 @@ function App() {
           currentColumn.push(card);
         }
       }
+      markRevealedCards(currentColumn)
       newColumns[i] = markColumnGroups(currentColumn);
     }
-    setColumns(newColumns);
+    setColumns(newColumns)
     setDealt(true);
   }
 
@@ -96,7 +98,6 @@ function App() {
         draggedCardCode[1] === "C" || draggedCardCode[1] === "S";
     }
 
-
     destinationCol = columnsCopy[Number(destinationColNum)];
 
     if(destinationCol.length > 0) {
@@ -106,7 +107,6 @@ function App() {
         destinationCard.code[1] === "S" || destinationCard.code[1] === "C";
     }
     
-
     const draggedCard = originatingCol.find((card) => card.code === draggedCardCode)
     if (draggedCard) {
       numOfDraggedCards = draggedCard.draggableGroup.length + 1
@@ -117,17 +117,24 @@ function App() {
     if (draggedCardIsBlack !== destinationCardIsBlack && destinationCardRank - draggedCardRank === 1 || destinationCol.length === 0 && draggedCardRank === 13) {
       const newDestinationColArr = destinationCol.concat(allDraggedCards)
       columnsCopy[Number(destinationColNum)] = newDestinationColArr
+    } else {
+      return
     }
-
     for (let i = 1; i < 8; i++) {
       markColumnGroups(columnsCopy[i])
     }
-    
     setColumns(columnsCopy);
   }
 
+  function handleDragStart (event: DragStartEvent) {
+    if(event.active.id === "3D-4") {
+      console.log("event cancelling")
+      return
+    }
+  }
+
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <PlayingBoard>
         <TopRow stockPile={stockPile} />
         <Tableau columns={columns} />

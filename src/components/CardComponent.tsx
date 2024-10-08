@@ -1,8 +1,9 @@
-import { PlayingCard } from "../utils/types";
+import { PileOfCards, PlayingCard } from "../utils/types";
 import { useDraggable } from "@dnd-kit/core";
 
 type CardProps = {
   card: PlayingCard;
+  cards: PileOfCards
   tableau: boolean;
   index: number;
   columnNo: number;
@@ -24,9 +25,10 @@ export default function Card({ card, tableau, index, columnNo }: CardProps) {
     zIndex: isDragging ? 1000 : "auto",
   };
 
+  const imgSrc = card.revealed ? card.images.png : 'https://www.deckofcardsapi.com/static/img/back.png'
+
   if (isDragging && card.draggableGroup?.length) {
     const cardsToRender = [card, ...card.draggableGroup];
-
     return (
       <div
         ref={setNodeRef}
@@ -41,7 +43,7 @@ export default function Card({ card, tableau, index, columnNo }: CardProps) {
             key={card.code}
             className={`absolute left-0`}
             style={{ top: `${index * 20}px` }}
-            src={card.images.png}
+            src={imgSrc}
             alt={`Card ${card.code}`}
             />
           )
@@ -58,7 +60,7 @@ export default function Card({ card, tableau, index, columnNo }: CardProps) {
         style={style}
         {...listeners}
         {...attributes}
-        src={card.images.png}
+        src={imgSrc}
         alt={`Card ${card.code}`}
       />
     );
