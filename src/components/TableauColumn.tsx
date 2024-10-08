@@ -28,6 +28,7 @@ export default function TableauColumn({ cards, columnNo, handleTableauColClick }
             index={index}
             columnNo={columnNo}
             handleTableauColClick={handleTableauColClick}
+            wastePile={null}
           />
         );
       })}

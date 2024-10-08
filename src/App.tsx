@@ -45,7 +45,6 @@ function App() {
         newStockPile.push(card);
       }
     }
-    console.log(newStockPile)
     setStockPile(newStockPile);
 
     for (let i = 1 as keyof TableauColumns; i < 8; i++) {
@@ -138,12 +137,26 @@ function App() {
      colCopy[colCopy.length - 1].revealed = true
      setColumns({...columns})
   }
+
+  function handleStockClick() {
+    const stockCopy = [...stockPile]
+    const wasteCopy = [...wastePile]
+    const cardsToTransfer = stockCopy.splice(stockCopy.length - 3)
+
+    const newWastePile = wasteCopy.concat(cardsToTransfer)
+    newWastePile.map((card) => {
+      card.revealed = true
+    })
+
+    setStockPile(stockCopy)
+    setWastePile(newWastePile)
+  }
  
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <PlayingBoard>
-        <TopRow stockPile={stockPile} wastePile={wastePile}/>
+        <TopRow stockPile={stockPile} wastePile={wastePile} handleStockClick={handleStockClick}/>
         <Tableau columns={columns} handleTableauColClick={handleTableauColClick}/>
         <ControlModule handleNewGameClick={handleNewGameClick} />
       </PlayingBoard>

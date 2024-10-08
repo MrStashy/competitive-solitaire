@@ -3,20 +3,28 @@ import { useDraggable } from "@dnd-kit/core";
 
 type CardProps = {
   card: PlayingCard;
-  cards: PileOfCards
+  cards: PileOfCards | null;
   tableau: boolean;
   index: number;
-  columnNo: number;
-  handleTableauColClick: (e: React.MouseEvent<HTMLImageElement>) => void
+  columnNo: number | null;
+  wastePile: boolean | null;
+  handleTableauColClick: ((e: React.MouseEvent<HTMLImageElement>) => void) | null
 };
 
-export default function Card({ card, tableau, index, columnNo, handleTableauColClick }: CardProps) {
+export default function Card({
+  card,
+  tableau,
+  index,
+  columnNo,
+  handleTableauColClick,
+  wastePile,
+}: CardProps) {
   const dragId = `${card.code}-${columnNo ?? 0}`;
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: dragId,
-      disabled: !card.revealed
+      disabled: !card.revealed,
     });
 
   const style = {
@@ -27,7 +35,18 @@ export default function Card({ card, tableau, index, columnNo, handleTableauColC
     zIndex: isDragging ? 1000 : "auto",
   };
 
-  const imgSrc = card.revealed ? card.images.png : 'https://www.deckofcardsapi.com/static/img/back.png'
+  const wastePileStyle = {
+    transform: transform
+    ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+    : undefined,
+  left: `${index * 20}px`,
+  zIndex: isDragging ? 1000 : "auto",
+  }
+
+
+  const imgSrc = card.revealed
+    ? card.images.png
+    : "https://www.deckofcardsapi.com/static/img/back.png";
 
   if (isDragging && card.draggableGroup?.length) {
     const cardsToRender = [card, ...card.draggableGroup];
@@ -41,20 +60,20 @@ export default function Card({ card, tableau, index, columnNo, handleTableauColC
       >
         {cardsToRender.map((card, index) => {
           return (
-            <img 
-            key={card.code}
-            className={`absolute left-0`}
-            style={{ top: `${index * 20}px` }}
-            src={card.images.png}
-            alt={`Card ${card.code}`}
+            <img
+              key={card.code}
+              className={`absolute`}
+              style={{ top: `${index * 20}px` }}
+              src={card.images.png}
+              alt={`Card ${card.code}`}
             />
-          )
+          );
         })}
       </div>
     );
   }
 
-  if (tableau) {
+  if (tableau && typeof handleTableauColClick === "function") {
     return (
       <img
         ref={setNodeRef}
@@ -65,8 +84,24 @@ export default function Card({ card, tableau, index, columnNo, handleTableauColC
         src={imgSrc}
         alt={`Card ${card.code}`}
         onClick={handleTableauColClick}
-        id={`${card.code}-${columnNo}`}  
-        />
+        id={`${card.code}-${columnNo}`}
+      />
+    );
+  }
+
+  console.log(index)
+  if (wastePile) {
+    return (
+      <img
+        style={wastePileStyle}
+        ref={setNodeRef}
+        {...listeners}
+        {...attributes}
+        src={imgSrc}
+        alt={`Card ${card.code}`}
+        id={`${card.code}-${columnNo}`}
+        className={`absolute`}
+      />
     );
   }
 }
