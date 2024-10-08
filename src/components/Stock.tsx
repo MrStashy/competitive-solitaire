@@ -6,7 +6,7 @@ type StockProps = {
 
 export default function Stock({ stockPile }: StockProps) {
   if (stockPile.length) {
-    return <img src={stockPile[0].images.png} className="" />;
+    return <img src={'https://www.deckofcardsapi.com/static/img/back.png'} className="" />;
   }
 
   return <p className="border">Stockpile</p>;

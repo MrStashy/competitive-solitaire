@@ -7,14 +7,16 @@ type CardProps = {
   tableau: boolean;
   index: number;
   columnNo: number;
+  handleTableauColClick: (e: React.MouseEvent<HTMLImageElement>) => void
 };
 
-export default function Card({ card, tableau, index, columnNo }: CardProps) {
+export default function Card({ card, tableau, index, columnNo, handleTableauColClick }: CardProps) {
   const dragId = `${card.code}-${columnNo ?? 0}`;
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: dragId,
+      disabled: !card.revealed
     });
 
   const style = {
@@ -43,7 +45,7 @@ export default function Card({ card, tableau, index, columnNo }: CardProps) {
             key={card.code}
             className={`absolute left-0`}
             style={{ top: `${index * 20}px` }}
-            src={imgSrc}
+            src={card.images.png}
             alt={`Card ${card.code}`}
             />
           )
@@ -62,7 +64,9 @@ export default function Card({ card, tableau, index, columnNo }: CardProps) {
         {...attributes}
         src={imgSrc}
         alt={`Card ${card.code}`}
-      />
+        onClick={handleTableauColClick}
+        id={`${card.code}-${columnNo}`}  
+        />
     );
   }
 }

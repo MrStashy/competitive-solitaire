@@ -7,7 +7,7 @@ import rankMap from "./utils/cardRankMap";
 import { getNewDeck, getNewFullDeck } from "./utils/apiFunctions";
 import { useState } from "react";
 import { PileOfCards, PlayingCard, TableauColumns } from "./utils/types";
-import { DndContext, DragStartEvent } from "@dnd-kit/core";
+import { DndContext } from "@dnd-kit/core";
 import { DragEndEvent } from "@dnd-kit/core";
 import markColumnGroups from "./utils/markColumnGroups";
 import markRevealedCards from "./utils/markRevealedCards";
@@ -40,9 +40,11 @@ function App() {
     for (let i = 0; i < 24; i++) {
       const card = deckCopy.shift();
       if (card) {
+        card.revealed = false
         newStockPile.push(card);
       }
     }
+    console.log(newStockPile)
     setStockPile(newStockPile);
 
     for (let i = 1 as keyof TableauColumns; i < 8; i++) {
@@ -126,18 +128,22 @@ function App() {
     setColumns(columnsCopy);
   }
 
-  function handleDragStart (event: DragStartEvent) {
-    if(event.active.id === "3D-4") {
-      console.log("event cancelling")
-      return
-    }
+  function handleTableauColClick(e: React.MouseEvent<HTMLImageElement>) {
+     const target = e.target as HTMLImageElement;
+     const { id } = target
+     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     const [_, colNum] = id.split('-')
+     const colCopy = [...columns[Number(colNum)]]
+     colCopy[colCopy.length - 1].revealed = true
+     setColumns({...columns})
   }
+ 
 
   return (
-    <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
+    <DndContext onDragEnd={handleDragEnd}>
       <PlayingBoard>
         <TopRow stockPile={stockPile} />
-        <Tableau columns={columns} />
+        <Tableau columns={columns} handleTableauColClick={handleTableauColClick}/>
         <ControlModule handleNewGameClick={handleNewGameClick} />
       </PlayingBoard>
     </DndContext>
