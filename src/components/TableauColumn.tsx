@@ -5,10 +5,11 @@ import { useDroppable } from "@dnd-kit/core";
 type TableauColumnProps = {
   cards: PileOfCards;
   columnNo: number;
-  handleTableauColClick: (e: React.MouseEvent<HTMLImageElement>) => void
+  handleTableauColClick: (e: React.MouseEvent<HTMLImageElement>) => void;
+  currentlyDraggedCards: PileOfCards
 };
 
-export default function TableauColumn({ cards, columnNo, handleTableauColClick }: TableauColumnProps) {
+export default function TableauColumn({ cards, columnNo, handleTableauColClick, currentlyDraggedCards }: TableauColumnProps) {
   const { setNodeRef } = useDroppable({
     id: columnNo,
   });
@@ -29,6 +30,7 @@ export default function TableauColumn({ cards, columnNo, handleTableauColClick }
             columnNo={columnNo}
             handleTableauColClick={handleTableauColClick}
             wastePile={null}
+            currentlyDraggedCards={currentlyDraggedCards}
           />
         );
       })}

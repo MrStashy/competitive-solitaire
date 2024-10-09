@@ -8,7 +8,10 @@ type CardProps = {
   index: number;
   columnNo: number | null;
   wastePile: boolean | null;
-  handleTableauColClick: ((e: React.MouseEvent<HTMLImageElement>) => void) | null
+  handleTableauColClick:
+    | ((e: React.MouseEvent<HTMLImageElement>) => void)
+    | null;
+  currentlyDraggedCards: PileOfCards;
 };
 
 export default function Card({
@@ -18,6 +21,7 @@ export default function Card({
   columnNo,
   handleTableauColClick,
   wastePile,
+  currentlyDraggedCards
 }: CardProps) {
   const dragId = `${card.code}-${columnNo ?? 0}`;
 
@@ -37,19 +41,22 @@ export default function Card({
 
   const wastePileStyle = {
     transform: transform
-    ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
-    : undefined,
-  left: `${index * 20}px`,
-  zIndex: isDragging ? 1000 : "auto",
-  }
-
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+      : undefined,
+    left: `${index * 20}px`,
+    zIndex: isDragging ? 1000 : "auto",
+  };
 
   const imgSrc = card.revealed
     ? card.images.png
     : "https://www.deckofcardsapi.com/static/img/back.png";
 
+  if (currentlyDraggedCards.includes(card) && currentlyDraggedCards[0] !==  card) {
+    return
+  }
+
   if (isDragging && card.draggableGroup?.length) {
-    const cardsToRender = [card, ...card.draggableGroup];
+    const draggedCardsToRender = [card, ...card.draggableGroup];
     return (
       <div
         ref={setNodeRef}
@@ -58,7 +65,7 @@ export default function Card({
         {...listeners}
         {...attributes}
       >
-        {cardsToRender.map((card, index) => {
+        {draggedCardsToRender.map((card, index) => {
           return (
             <img
               key={card.code}
@@ -89,7 +96,6 @@ export default function Card({
     );
   }
 
-  console.log(index)
   if (wastePile) {
     return (
       <img
