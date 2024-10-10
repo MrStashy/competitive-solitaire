@@ -1,38 +1,50 @@
-import { PileOfCards } from "../utils/types"
-import CardComponent from "./CardComponent"
+import { PileOfCards } from "../utils/types";
+import CardComponent from "./CardComponent";
 
 type WastePileProps = {
-    wastePile: PileOfCards
-}
+  wastePile: PileOfCards;
+};
 
-export default function WastePile({wastePile}: WastePileProps) {
-    let style = "relative w-[100px]"
+export default function WastePile({ wastePile }: WastePileProps) {
+  let style = "relative w-[100px]";
+  let cardsToDisplay;
 
-    if (!wastePile.length) {
-        style += " border"
-    }  
+  if (!wastePile.length) {
+    style += " border";
+  }
 
-    const cardsToDisplay = wastePile.slice(wastePile.length - 3)
-
-    if (cardsToDisplay) {
-        return (
-            <div className={style}>
-                    {cardsToDisplay.map((card, index) => {
-
-                        if (index === cardsToDisplay.length - 1) {
-                            card.draggable = true
-                        }
-                        return (
-                            <CardComponent card={card} wastePile={true} key={card.code} index={index} cards={null} columnNo={null} handleTableauColClick={null} tableau={false} currentlyDraggedCards={[]}/>
-                        )
-                    })}
-            </div>
-        )
-    }
+  
+  if (wastePile.length <= 3) {
+    cardsToDisplay = wastePile;
+  } else {
+    cardsToDisplay = wastePile.slice(wastePile.length - 3);
+  }
 
 
-      return (
-        <div className={style}>
-        </div>
-      )
+  if (cardsToDisplay) {
+    return (
+      <div className={style}>
+        {cardsToDisplay.map((card, index) => {
+          if (index === cardsToDisplay.length - 1) {
+            card.draggable = true;
+          }
+          return (
+            <CardComponent
+              card={card}
+              wastePile={true}
+              key={card.code}
+              index={index}
+              cards={null}
+              columnNo={null}
+              handleTableauColClick={null}
+              tableau={false}
+              currentlyDraggedCards={[]}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  return <div className={style}></div>;
 }

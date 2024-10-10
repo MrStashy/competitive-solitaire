@@ -149,9 +149,15 @@ function App() {
   function handleStockClick() {
     const stockCopy = [...stockPile]
     const wasteCopy = [...wastePile]
-    const cardsToTransfer = stockCopy.splice(stockCopy.length - 3)
 
-    const newWastePile = wasteCopy.concat(cardsToTransfer)
+    if (!stockCopy.length) {
+      setStockPile(wasteCopy.reverse())
+      setWastePile([])
+      return
+    }
+
+    const cardsToTransfer = stockCopy.splice(stockCopy.length - 3)
+    const newWastePile = wasteCopy.concat(cardsToTransfer.reverse())
     newWastePile.map((card) => {
       card.revealed = true
     })
