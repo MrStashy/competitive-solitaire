@@ -103,8 +103,8 @@ function App() {
         draggedCardCode[1] === "C" || draggedCardCode[1] === "S";
     }
 
-    if (originatingColNum === '0') {
-      // handleWasteToColDrag()
+    if (originatingColNum === '0' && typeof over.id === 'number') {
+      handleWasteToColDrag(draggedCardCode, over.id)
       return
     }
 
@@ -170,6 +170,9 @@ function App() {
 
   if (typeof active.id === 'string') {
   [cardCode, colNum] = active.id.split('-')
+  if (colNum === '0') {
+    return
+  }
   colCopy = [...columns[Number(colNum)]]
   card = colCopy.find((card) => card.code.includes(cardCode))
   if (!card) {
@@ -183,6 +186,10 @@ function App() {
   const currentlyDraggedCards = [card].concat(colCopy.splice(indexOfCard + 1, card.draggableGroup.length + 1))
 
   setCurrentlyDraggedCards(currentlyDraggedCards)
+ }
+
+ function handleWasteToColDrag(cardCode: string, over: number) {
+  console.log(cardCode, over)
  }
 
   return (

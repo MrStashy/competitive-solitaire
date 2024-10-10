@@ -18,8 +18,12 @@ export default function WastePile({wastePile}: WastePileProps) {
         return (
             <div className={style}>
                     {cardsToDisplay.map((card, index) => {
+
+                        if (index === cardsToDisplay.length - 1) {
+                            card.draggable = true
+                        }
                         return (
-                            <CardComponent card={card} wastePile={true} key={card.code} index={index} cards={null} columnNo={null} handleTableauColClick={null} tableau={false}/>
+                            <CardComponent card={card} wastePile={true} key={card.code} index={index} cards={null} columnNo={null} handleTableauColClick={null} tableau={false} currentlyDraggedCards={[]}/>
                         )
                     })}
             </div>

@@ -51,7 +51,7 @@ export default function Card({
     ? card.images.png
     : "https://www.deckofcardsapi.com/static/img/back.png";
 
-  if (currentlyDraggedCards.includes(card) && currentlyDraggedCards[0] !==  card) {
+  if (currentlyDraggedCards?.includes(card) && currentlyDraggedCards[0] !==  card) {
     return
   }
 
@@ -97,12 +97,13 @@ export default function Card({
   }
 
   if (wastePile) {
+    console.log(card.draggable)
     return (
       <img
         style={wastePileStyle}
-        ref={setNodeRef}
-        {...listeners}
-        {...attributes}
+        ref={card.draggable ? setNodeRef : null}
+        {...(card.draggable ? listeners : {})}
+        {...(card.draggable ? attributes : {})}
         src={imgSrc}
         alt={`Card ${card.code}`}
         id={`${card.code}-${columnNo}`}
