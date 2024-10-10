@@ -6,7 +6,7 @@ import ControlModule from "./components/ControlModule";
 import rankMap from "./utils/cardRankMap";
 import { getNewDeck, getNewFullDeck } from "./utils/apiFunctions";
 import { useState } from "react";
-import { PileOfCards, PlayingCard, TableauColumns } from "./utils/types";
+import { PileOfCards, PlayingCard, TableauColumns, Foundations } from "./utils/types";
 import { DndContext, DragStartEvent } from "@dnd-kit/core";
 import { DragEndEvent } from "@dnd-kit/core";
 import markColumnGroups from "./utils/markColumnGroups";
@@ -17,16 +17,9 @@ function App() {
   const [stockPile, setStockPile] = useState<PileOfCards>([]);
   const [wastePile, setWastePile] = useState<PileOfCards>([])
   const [dealt, setDealt] = useState<boolean>(false);
-  const [columns, setColumns] = useState<TableauColumns>({
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-    6: [],
-    7: [],
-  });
+  const [columns, setColumns] = useState<TableauColumns>({});
   const [currentlyDraggedCards, setCurrentlyDraggedCards] = useState<PileOfCards>([])
+  const [foundations, setFoundations] = useState<Foundations>({})
 
   async function handleNewGameClick() {
     const newDeckId = await getNewDeck();
@@ -197,22 +190,31 @@ function App() {
  function handleWasteToColDrag(draggedCardCode: string, destinationColNum: number) {
     const destinationColCopy = [...columns[destinationColNum]]
     const wastePileCopy = [...wastePile]
-    const destinationCard = destinationColCopy[destinationColCopy.length-1]
-    const destinationCardIsBlack = destinationCard.code[1] === 'S' || destinationCard.code[1] === 'C'
-    const draggedCardIsBlack = draggedCardCode[1] === 'S' || draggedCardCode[1] === 'C'
-    const destinationCardRank = rankMap[destinationCard.code[0]]
-    const draggedCardRank = rankMap[draggedCardCode[0]]    
-    
-    if (destinationCardIsBlack !== draggedCardIsBlack && draggedCardRank - destinationCardRank === -1) {
-      const cardFromWastePile = wastePileCopy.pop()
 
+    if (destinationColCopy.length) {
+      const destinationCard = destinationColCopy[destinationColCopy.length-1]
+      const destinationCardIsBlack = destinationCard.code[1] === 'S' || destinationCard.code[1] === 'C'
+      const draggedCardIsBlack = draggedCardCode[1] === 'S' || draggedCardCode[1] === 'C'
+      const destinationCardRank = rankMap[destinationCard.code[0]]
+      const draggedCardRank = rankMap[draggedCardCode[0]]    
+      
+      if (destinationCardIsBlack !== draggedCardIsBlack && draggedCardRank - destinationCardRank === -1) {
+        const cardFromWastePile = wastePileCopy.pop()
+  
+        if (cardFromWastePile) {
+          destinationColCopy.push(cardFromWastePile)
+        }
+      }
+    } else {
+      const cardFromWastePile = wastePileCopy.pop()
       if (cardFromWastePile) {
         destinationColCopy.push(cardFromWastePile)
       }
-
-      setWastePile(wastePileCopy)
-      setColumns({...columns, [destinationColNum]: destinationColCopy})
     }
+
+    markColumnGroups(destinationColCopy)
+    setWastePile(wastePileCopy)
+    setColumns({...columns, [destinationColNum]: destinationColCopy})
  }
 
   return (

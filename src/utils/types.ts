@@ -17,3 +17,7 @@ export type PileOfCards = PlayingCard[]
 export type TableauColumns = {
  [key: number]: PileOfCards
 }
+
+export type Foundations = {
+    [key: number]: PileOfCards
+   }
