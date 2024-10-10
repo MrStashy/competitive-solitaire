@@ -1,15 +1,21 @@
 import Stock from "./Stock";
 import WastePile from "./WastePile";
 import Foundation from "./Foundation";
-import { PileOfCards } from "../utils/types";
+import { Foundations, PileOfCards } from "../utils/types";
 
 type TopRowProps = {
   stockPile: PileOfCards
   wastePile: PileOfCards
   handleStockClick: (e: React.MouseEvent<HTMLImageElement>) => void
+  foundations: Foundations
 }
 
-export default function TopRow({ stockPile, wastePile, handleStockClick }: TopRowProps) {
+export default function TopRow({ stockPile, wastePile, handleStockClick, foundations }: TopRowProps) {
+  const foundationsKeys = Object.keys(foundations)
+
+
+  console.log(foundations)
+  
   return (
     <header className="flex flex-row justify-between p-2 min-h-40">
       <div className="flex flex-row gap-2">
@@ -17,10 +23,11 @@ export default function TopRow({ stockPile, wastePile, handleStockClick }: TopRo
         <WastePile wastePile={wastePile} />
       </div>
       <div className="flex flex-row gap-2">
-        <Foundation />
-        <Foundation />
-        <Foundation />
-        <Foundation />
+        {foundationsKeys.map((foundationNum) => {
+          return (
+              <Foundation foundationCards={foundations[Number(foundationNum)]} key={foundationNum}/>
+          )
+        })}
       </div>
     </header>
   );

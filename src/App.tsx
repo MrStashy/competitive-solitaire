@@ -31,6 +31,7 @@ function App() {
     const deckCopy: PileOfCards = [...gameDeck];
     const newStockPile: PileOfCards = [];
     const newColumns: TableauColumns = {};
+    const newFoundations: Foundations = {}
 
     for (let i = 0; i < 24; i++) {
       const card = deckCopy.shift();
@@ -41,7 +42,7 @@ function App() {
     }
     setStockPile(newStockPile);
 
-    for (let i = 1 as keyof TableauColumns; i < 8; i++) {
+    for (let i = 1; i < 8; i++) {
       const currentColumn = [];
       for (let j = 0; j < i; j++) {
         const card = deckCopy.shift();
@@ -52,6 +53,11 @@ function App() {
       markRevealedCards(currentColumn)
       newColumns[i] = markColumnGroups(currentColumn);
     }
+
+    for (let i = 1; i < 5; i++) {
+      newFoundations[i] = []
+    }
+    setFoundations(newFoundations)
     setColumns(newColumns)
     setDealt(true);
   }
@@ -220,7 +226,7 @@ function App() {
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <PlayingBoard>
-        <TopRow stockPile={stockPile} wastePile={wastePile} handleStockClick={handleStockClick}/>
+        <TopRow stockPile={stockPile} wastePile={wastePile} handleStockClick={handleStockClick} foundations={foundations}/>
         <Tableau columns={columns} handleTableauColClick={handleTableauColClick} currentlyDraggedCards={currentlyDraggedCards}/>
         <ControlModule handleNewGameClick={handleNewGameClick} />
       </PlayingBoard>
