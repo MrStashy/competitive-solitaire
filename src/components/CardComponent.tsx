@@ -99,7 +99,6 @@ export default function Card({
   }
 
   if (wastePile) {
-    console.log(card.draggable)
     return (
       <img
         style={wastePileStyle}

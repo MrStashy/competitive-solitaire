@@ -188,8 +188,25 @@ function App() {
   setCurrentlyDraggedCards(currentlyDraggedCards)
  }
 
- function handleWasteToColDrag(cardCode: string, over: number) {
-  console.log(cardCode, over)
+ function handleWasteToColDrag(draggedCardCode: string, destinationColNum: number) {
+    const destinationColCopy = [...columns[destinationColNum]]
+    const wastePileCopy = [...wastePile]
+    const destinationCard = destinationColCopy[destinationColCopy.length-1]
+    const destinationCardIsBlack = destinationCard.code[1] === 'S' || destinationCard.code[1] === 'C'
+    const draggedCardIsBlack = draggedCardCode[1] === 'S' || draggedCardCode[1] === 'C'
+    const destinationCardRank = rankMap[destinationCard.code[0]]
+    const draggedCardRank = rankMap[draggedCardCode[0]]    
+    
+    if (destinationCardIsBlack !== draggedCardIsBlack && draggedCardRank - destinationCardRank === -1) {
+      const cardFromWastePile = wastePileCopy.pop()
+
+      if (cardFromWastePile) {
+        destinationColCopy.push(cardFromWastePile)
+      }
+
+      setWastePile(wastePileCopy)
+      setColumns({...columns, [destinationColNum]: destinationColCopy})
+    }
  }
 
   return (
