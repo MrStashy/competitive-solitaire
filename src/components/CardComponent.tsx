@@ -73,6 +73,7 @@ export default function Card({
               style={{ top: `${index * 20}px` }}
               src={card.images.png}
               alt={`Card ${card.code}`}
+              draggable={false}
             />
           );
         })}
@@ -92,6 +93,7 @@ export default function Card({
         alt={`Card ${card.code}`}
         onClick={handleTableauColClick}
         id={`${card.code}-${columnNo}`}
+        draggable={false}
       />
     );
   }
@@ -108,6 +110,7 @@ export default function Card({
         alt={`Card ${card.code}`}
         id={`${card.code}-${columnNo}`}
         className={`absolute`}
+        draggable={false}
       />
     );
   }
