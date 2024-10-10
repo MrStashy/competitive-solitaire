@@ -12,6 +12,7 @@ type CardProps = {
     | ((e: React.MouseEvent<HTMLImageElement>) => void)
     | null;
   currentlyDraggedCards: PileOfCards;
+  foundation: boolean
 };
 
 export default function Card({
@@ -21,7 +22,8 @@ export default function Card({
   columnNo,
   handleTableauColClick,
   wastePile,
-  currentlyDraggedCards
+  currentlyDraggedCards, 
+  foundation
 }: CardProps) {
   const dragId = `${card.code}-${columnNo ?? 0}`;
 
@@ -113,4 +115,15 @@ export default function Card({
       />
     );
   }
+
+  if (foundation) {
+    return (
+      <img
+        src={imgSrc}
+        alt={`Card ${card.code}`}
+        draggable={false}
+      />
+    );
+  }
+
 }

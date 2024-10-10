@@ -1,19 +1,26 @@
 import { PileOfCards } from "../utils/types"
 import Card from "./CardComponent"
+import { useDroppable } from "@dnd-kit/core";
 
 type FoundationProps = {
     foundationCards: PileOfCards
+    foundationNum: number
 }
 
-export default function Foundation({ foundationCards }: FoundationProps) {
-    
+export default function Foundation({ foundationCards, foundationNum }: FoundationProps) {
+    const { setNodeRef } = useDroppable({
+        id: 'F' + foundationNum.toString()
+      });
+
     if (foundationCards.length) {
         return (
-            <Card card={foundationCards[0]} cards={null} tableau={false} index={0} columnNo={null} wastePile={null} handleTableauColClick={null} currentlyDraggedCards={[]} />
+            <div ref={setNodeRef} className="w-[100px]">
+            <Card card={foundationCards[foundationCards.length - 1]} cards={null} tableau={false} index={0} columnNo={null} wastePile={null} handleTableauColClick={null} currentlyDraggedCards={[]} foundation={true}/>
+            </div>
         )
     }
 
     return (
-            <p className="border">Foundation</p>      
+            <p className="border w-[100px]" ref={setNodeRef}></p>      
     )
 }

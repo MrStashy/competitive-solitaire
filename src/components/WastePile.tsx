@@ -39,6 +39,7 @@ export default function WastePile({ wastePile }: WastePileProps) {
               handleTableauColClick={null}
               tableau={false}
               currentlyDraggedCards={[]}
+              foundation={false}
             />
           );
         })}
