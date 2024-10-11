@@ -6,11 +6,11 @@ type WastePileProps = {
 };
 
 export default function WastePile({ wastePile }: WastePileProps) {
-  let style = "relative min-w-[100px]";
+  let style = "relative w-[100px] max-h-[140px]";
   let cardsToDisplay;
 
   if (!wastePile.length) {
-    style += " border-2 rounded-md";
+    style += " border-2 rounded-md max-h-[140px]";
   }
 
   

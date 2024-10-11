@@ -16,6 +16,7 @@ import { DndContext, DragStartEvent } from "@dnd-kit/core";
 import { DragEndEvent } from "@dnd-kit/core";
 import markColumnGroups from "./utils/markColumnGroups";
 import markRevealedCards from "./utils/markRevealedCards";
+import { Slab } from "react-loading-indicators";
 
 function App() {
   const [gameDeck, setDeck] = useState<PileOfCards>([]);
@@ -26,8 +27,10 @@ function App() {
   const [currentlyDraggedCards, setCurrentlyDraggedCards] =
     useState<PileOfCards>([]);
   const [foundations, setFoundations] = useState<Foundations>({1: [], 2: [], 3: [], 4: []});
+  const [loadingNewGame, setLoadingNewGame] = useState<boolean>(false)
 
   async function handleNewGameClick() {
+    setLoadingNewGame(true)
     const newDeckId = await getNewDeck();
     const deck = await getNewFullDeck(newDeckId);
     setDeck(deck);
@@ -66,6 +69,7 @@ function App() {
     setFoundations(newFoundations);
     setColumns(newColumns);
     setDealt(true);
+    setLoadingNewGame(false)
   }
 
   if (gameDeck.length && !dealt) {
@@ -309,6 +313,16 @@ function App() {
     setFoundations({ ...foundationsCopy });
   }
 
+  function handleRestartClick() {
+     setDealt(!dealt)
+     setDeck([])
+     setWastePile([])
+     setStockPile([])
+     setFoundations({1: [], 2: [], 3: [], 4: []})
+     setColumns({})
+     handleNewGameClick()
+  }
+
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <PlayingBoard>
@@ -318,12 +332,13 @@ function App() {
           handleStockClick={handleStockClick}
           foundations={foundations}
         />
+        {loadingNewGame && <Slab color="grey" size="medium" text="Dealing..."/>}
         <Tableau
           columns={columns}
           handleTableauColClick={handleTableauColClick}
           currentlyDraggedCards={currentlyDraggedCards}
         />
-        <ControlModule handleNewGameClick={handleNewGameClick} />
+        <ControlModule handleNewGameClick={handleNewGameClick} dealt={dealt} handleRestartClick={handleRestartClick} loadingNewGame={loadingNewGame} />
       </PlayingBoard>
     </DndContext>
   );
