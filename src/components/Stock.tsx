@@ -6,12 +6,12 @@ type StockProps = {
 };
 
 export default function Stock({ stockPile, handleStockClick }: StockProps) {
-  const style = stockPile.length ? "max-h-40 w-[100px]" : "border w-[100px]";
+  const style = stockPile.length ? "relative w-[100px]" : "border-2 w-[100px] rounded-md";
 
   if (stockPile.length) {
     return (
       <img
-        src={"public/img/1B.svg"}
+        src={"/img/1B.svg"}
         className={style}
         onClick={handleStockClick}
       />

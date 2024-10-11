@@ -14,7 +14,7 @@ export default function TopRow({ stockPile, wastePile, handleStockClick, foundat
   const foundationsKeys = Object.keys(foundations)
 
   return (
-    <header className="flex flex-row justify-between p-2 min-h-40">
+    <header className="flex flex-row justify-between p-2 h-40">
       <div className="flex flex-row gap-2">
         <Stock stockPile={stockPile} handleStockClick={handleStockClick}/>
         <WastePile wastePile={wastePile} />

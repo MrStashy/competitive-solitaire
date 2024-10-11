@@ -25,7 +25,7 @@ function App() {
   const [columns, setColumns] = useState<TableauColumns>({});
   const [currentlyDraggedCards, setCurrentlyDraggedCards] =
     useState<PileOfCards>([]);
-  const [foundations, setFoundations] = useState<Foundations>({});
+  const [foundations, setFoundations] = useState<Foundations>({1: [], 2: [], 3: [], 4: []});
 
   async function handleNewGameClick() {
     const newDeckId = await getNewDeck();
@@ -277,22 +277,24 @@ function App() {
       }
     }
     if (!foundCardAndOrigin[1]) {
-      return
+      return;
     }
 
-    const destinationFoundation = foundationsCopy[destinationFoundationNum]
-    const destinationCard = destinationFoundation[destinationFoundation.length - 1]
-    const draggedCardRank = rankMap[foundCardAndOrigin[1].code[0]]
-    
+    const destinationFoundation = foundationsCopy[destinationFoundationNum];
+    const destinationCard =
+      destinationFoundation[destinationFoundation.length - 1];
+    const draggedCardRank = rankMap[foundCardAndOrigin[1].code[0]];
+
     if (draggedCardRank !== 1) {
-      const destinationCardRank = rankMap[destinationCard.code[0]] 
-      if (foundCardAndOrigin[1].code[1] !== destinationCard.code[1] || draggedCardRank - destinationCardRank !== 1 || !destinationFoundation.length) {
+      const destinationCardRank = rankMap[destinationCard.code[0]];
+      if (
+        foundCardAndOrigin[1].code[1] !== destinationCard.code[1] ||
+        draggedCardRank - destinationCardRank !== 1 ||
+        !destinationFoundation.length
+      ) {
         return;
       }
     }
-    
-
- 
 
     if (foundCardAndOrigin[0] === 0) {
       wastePileCopy.pop();

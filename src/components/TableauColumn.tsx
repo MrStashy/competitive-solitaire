@@ -6,13 +6,27 @@ type TableauColumnProps = {
   cards: PileOfCards;
   columnNo: number;
   handleTableauColClick: (e: React.MouseEvent<HTMLImageElement>) => void;
-  currentlyDraggedCards: PileOfCards
+  currentlyDraggedCards: PileOfCards;
 };
 
-export default function TableauColumn({ cards, columnNo, handleTableauColClick, currentlyDraggedCards }: TableauColumnProps) {
+export default function TableauColumn({
+  cards,
+  columnNo,
+  handleTableauColClick,
+  currentlyDraggedCards,
+}: TableauColumnProps) {
   const { setNodeRef } = useDroppable({
     id: columnNo,
   });
+
+  if (!cards.length) {
+    return (
+      <div
+        ref={setNodeRef}
+        className="border-2 rounded-md h-36 w-[100px]"
+      ></div>
+    );
+  }
 
   return (
     <div
@@ -31,11 +45,10 @@ export default function TableauColumn({ cards, columnNo, handleTableauColClick, 
             handleTableauColClick={handleTableauColClick}
             wastePile={null}
             currentlyDraggedCards={currentlyDraggedCards}
+            foundation={false}
           />
         );
       })}
     </div>
   );
 }
-
-

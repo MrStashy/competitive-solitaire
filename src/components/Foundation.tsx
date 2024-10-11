@@ -21,6 +21,6 @@ export default function Foundation({ foundationCards, foundationNum }: Foundatio
     }
 
     return (
-            <p className="border w-[100px]" ref={setNodeRef}></p>      
+            <p className="w-[100px] rounded-md border-2" ref={setNodeRef}></p>      
     )
 }
