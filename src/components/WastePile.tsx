@@ -27,6 +27,8 @@ export default function WastePile({ wastePile }: WastePileProps) {
         {cardsToDisplay.map((card, index) => {
           if (index === cardsToDisplay.length - 1) {
             card.draggable = true;
+          } else {
+            card.draggable = false;
           }
           return (
             <CardComponent
