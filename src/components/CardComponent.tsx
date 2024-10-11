@@ -27,6 +27,7 @@ export default function Card({
 }: CardProps) {
   const dragId = `${card.code}-${columnNo ?? 0}`;
 
+
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: dragId,
@@ -50,8 +51,8 @@ export default function Card({
   };
 
   const imgSrc = card.revealed
-    ? card.images.png
-    : "https://www.deckofcardsapi.com/static/img/back.png";
+    ? `/img/${card.code}.svg`
+    : "/img/1B.svg";
 
   if (currentlyDraggedCards?.includes(card) && currentlyDraggedCards[0] !==  card) {
     return
@@ -73,7 +74,7 @@ export default function Card({
               key={card.code}
               className={`absolute`}
               style={{ top: `${index * 20}px` }}
-              src={card.images.png}
+              src={ `/img/${card.code}.svg`}
               alt={`Card ${card.code}`}
               draggable={false}
             />

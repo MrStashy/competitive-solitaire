@@ -11,7 +11,7 @@ export default function Stock({ stockPile, handleStockClick }: StockProps) {
   if (stockPile.length) {
     return (
       <img
-        src={"https://www.deckofcardsapi.com/static/img/back.png"}
+        src={"public/img/1B.svg"}
         className={style}
         onClick={handleStockClick}
       />
