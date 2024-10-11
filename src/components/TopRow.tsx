@@ -9,9 +9,10 @@ type TopRowProps = {
   handleStockClick: (e: React.MouseEvent<HTMLImageElement>) => void
   foundations: Foundations
   score: number
+  dealt: boolean
 }
 
-export default function TopRow({ stockPile, wastePile, handleStockClick, foundations, score }: TopRowProps) {
+export default function TopRow({ stockPile, wastePile, handleStockClick, foundations, score, dealt }: TopRowProps) {
   const foundationsKeys = Object.keys(foundations)
   return (
     <header className="flex flex-row justify-between p-2 place-items-center">
@@ -19,10 +20,13 @@ export default function TopRow({ stockPile, wastePile, handleStockClick, foundat
         <Stock stockPile={stockPile} handleStockClick={handleStockClick}/>
         <WastePile wastePile={wastePile} />
       </div>
-      <div className="bg-white h-[100px] flex flex-col p-4 place-items-center rounded-md">
+      {dealt && <div className="bg-slate-500/50 h-auto p-4 rounded-md place-items-center flex flex-col w-[80px] animate-gradient bg-[length:200%_200%] text-white border-2">
       <p>Score</p>
-      <p>{score}</p>
-      </div>
+      <p className="text-yellow-300">{score}</p>
+      <p>Time</p>
+      <p className="text-yellow-300">00:00</p>
+      </div>}
+   
       <div className="flex flex-row gap-2 h-[140px]">
         {foundationsKeys.map((foundationNum) => {
           return (

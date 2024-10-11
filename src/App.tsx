@@ -333,6 +333,7 @@ function App() {
           handleStockClick={handleStockClick}
           foundations={foundations}
           score={score}
+          dealt={dealt}
         />
         {loadingNewGame && <Slab color="grey" size="medium" text="Dealing..."/>}
         <Tableau
