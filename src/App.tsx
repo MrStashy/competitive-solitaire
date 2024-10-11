@@ -28,6 +28,7 @@ function App() {
     useState<PileOfCards>([]);
   const [foundations, setFoundations] = useState<Foundations>({1: [], 2: [], 3: [], 4: []});
   const [loadingNewGame, setLoadingNewGame] = useState<boolean>(false)
+  const [score, setScore] = useState<number>(0)
 
   async function handleNewGameClick() {
     setLoadingNewGame(true)
@@ -331,6 +332,7 @@ function App() {
           wastePile={wastePile}
           handleStockClick={handleStockClick}
           foundations={foundations}
+          score={score}
         />
         {loadingNewGame && <Slab color="grey" size="medium" text="Dealing..."/>}
         <Tableau
