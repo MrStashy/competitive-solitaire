@@ -7,7 +7,7 @@ type PlayingBoardProps = {
 
 export default function PlayingBoard ({children} : PlayingBoardProps) {
     return(
-        <div className="bg-green-700 h-screen">
+        <div className="bg-[url('/img/card-table-bg.jpg')] bg-cover bg-center h-screen">
             {children}
         </div>
     )
