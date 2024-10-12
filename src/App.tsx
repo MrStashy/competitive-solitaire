@@ -17,6 +17,7 @@ import { DragEndEvent } from "@dnd-kit/core";
 import markColumnGroups from "./utils/markColumnGroups";
 import markRevealedCards from "./utils/markRevealedCards";
 import { Slab } from "react-loading-indicators";
+import FinishedGameDialog from "./components/FinishedGameDialog";
 
 function App() {
   const [gameDeck, setDeck] = useState<PileOfCards>([]);
@@ -26,13 +27,19 @@ function App() {
   const [columns, setColumns] = useState<TableauColumns>({});
   const [currentlyDraggedCards, setCurrentlyDraggedCards] =
     useState<PileOfCards>([]);
-  const [foundations, setFoundations] = useState<Foundations>({1: [], 2: [], 3: [], 4: []});
-  const [loadingNewGame, setLoadingNewGame] = useState<boolean>(false)
-  const [score, setScore] = useState<number>(0)
-  const [timer, setTimer] = useState<number>(0)
+  const [foundations, setFoundations] = useState<Foundations>({
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+  });
+  const [loadingNewGame, setLoadingNewGame] = useState<boolean>(false);
+  const [score, setScore] = useState<number>(0);
+  const [timer, setTimer] = useState<number>(0);
+  const [gameFinished, setGameFinished] = useState<boolean>(false);
 
   async function handleNewGameClick() {
-    setLoadingNewGame(true)
+    setLoadingNewGame(true);
     const newDeckId = await getNewDeck();
     const deck = await getNewFullDeck(newDeckId);
     setDeck(deck);
@@ -71,9 +78,8 @@ function App() {
     setFoundations(newFoundations);
     setColumns(newColumns);
     setDealt(true);
-    setLoadingNewGame(false)
+    setLoadingNewGame(false);
   }
-
 
   if (gameDeck.length && !dealt) {
     dealCards();
@@ -170,7 +176,7 @@ function App() {
     const colCopy = [...columns[Number(colNum)]];
     colCopy[colCopy.length - 1].revealed = true;
     setColumns({ ...columns });
-    setScore(prev => prev + 5)
+    setScore((prev) => prev + 5);
   }
 
   function handleStockClick() {
@@ -259,7 +265,7 @@ function App() {
     markColumnGroups(destinationColCopy);
     setWastePile(wastePileCopy);
     setColumns({ ...columns, [destinationColNum]: destinationColCopy });
-    setScore(prev => prev + 5)
+    setScore((prev) => prev + 5);
   }
 
   function handleDragToFoundation(draggedCardCode: string, overId: string) {
@@ -316,19 +322,19 @@ function App() {
 
     foundationsCopy[destinationFoundationNum].push(foundCardAndOrigin[1]);
     setFoundations({ ...foundationsCopy });
-    setScore(prev => prev + 10)
+    setScore((prev) => prev + 10);
   }
 
   function handleRestartClick() {
-     setDealt(!dealt)
-     setDeck([])
-     setWastePile([])
-     setStockPile([])
-     setFoundations({1: [], 2: [], 3: [], 4: []})
-     setColumns({})
-     setScore(0)
-     setTimer(0)
-     handleNewGameClick()
+    setDealt(!dealt);
+    setDeck([]);
+    setWastePile([]);
+    setStockPile([]);
+    setFoundations({ 1: [], 2: [], 3: [], 4: [] });
+    setColumns({});
+    setScore(0);
+    setTimer(0);
+    handleNewGameClick();
   }
 
   return (
@@ -344,14 +350,23 @@ function App() {
           timer={timer}
           setTimer={setTimer}
         />
-        {loadingNewGame && <Slab color="grey" size="medium" text="Dealing..."/>}
+        {loadingNewGame && (
+          <Slab color="grey" size="medium" text="Dealing..." />
+        )}
         <Tableau
           columns={columns}
           handleTableauColClick={handleTableauColClick}
           currentlyDraggedCards={currentlyDraggedCards}
         />
-        <ControlModule handleNewGameClick={handleNewGameClick} dealt={dealt} handleRestartClick={handleRestartClick} loadingNewGame={loadingNewGame} />
+        <ControlModule
+          handleNewGameClick={handleNewGameClick}
+          dealt={dealt}
+          handleRestartClick={handleRestartClick}
+          loadingNewGame={loadingNewGame}
+          setGameFinished={setGameFinished}
+        />
       </PlayingBoard>
+      <FinishedGameDialog gameFinished={gameFinished}/>
     </DndContext>
   );
 }
