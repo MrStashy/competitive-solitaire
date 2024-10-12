@@ -2,7 +2,7 @@ import Stock from "./Stock";
 import WastePile from "./WastePile";
 import Foundation from "./Foundation";
 import { Foundations, PileOfCards } from "../utils/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type TopRowProps = {
   stockPile: PileOfCards
@@ -11,19 +11,17 @@ type TopRowProps = {
   foundations: Foundations
   score: number
   dealt: boolean
-  timer: number
-  setTimer: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function TopRow({ stockPile, wastePile, handleStockClick, foundations, score, dealt, timer, setTimer }: TopRowProps) {
+export default function TopRow({ stockPile, wastePile, handleStockClick, foundations, score, dealt }: TopRowProps) {
+  const [timer, setTimer] = useState(0)
 
-useEffect(() => {
-  const intervalId = setInterval(() => {
-    setTimer(prev => prev + 1);
-  }, 1000);
-
-  return () => clearInterval(intervalId);
-}, [])
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTimer(prev => prev += 1)
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, [])
 
 
   const foundationsKeys = Object.keys(foundations)
@@ -50,3 +48,5 @@ useEffect(() => {
     </header>
   );
 }
+
+

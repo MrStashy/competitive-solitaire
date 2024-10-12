@@ -5,7 +5,7 @@ import Tableau from "./components/Tableau";
 import ControlModule from "./components/ControlModule";
 import rankMap from "./utils/cardRankMap";
 import { getNewDeck, getNewFullDeck } from "./utils/apiFunctions";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   PileOfCards,
   PlayingCard,
@@ -35,8 +35,9 @@ function App() {
   });
   const [loadingNewGame, setLoadingNewGame] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
-  const [timer, setTimer] = useState<number>(0);
+  // const [timer, setTimer] = useState<number>(0);
   const [gameFinished, setGameFinished] = useState<boolean>(false);
+  const timerRef = useRef(0)
 
   async function handleNewGameClick() {
     setLoadingNewGame(true);
@@ -326,6 +327,7 @@ function App() {
   }
 
   function handleRestartClick() {
+    console.log(timerRef.current)
     setDealt(!dealt);
     setDeck([]);
     setWastePile([]);
@@ -333,25 +335,36 @@ function App() {
     setFoundations({ 1: [], 2: [], 3: [], 4: [] });
     setColumns({});
     setScore(0);
-    setTimer(0);
+    timerRef.current = 0
     handleNewGameClick();
   }
+
+  function endGame() {
+    console.log('over')
+  }
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      timerRef.current += 1; 
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, [loadingNewGame]) 
 
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <PlayingBoard>
-        <TopRow
+        {!loadingNewGame && dealt && <TopRow
           stockPile={stockPile}
           wastePile={wastePile}
           handleStockClick={handleStockClick}
           foundations={foundations}
           score={score}
           dealt={dealt}
-          timer={timer}
-          setTimer={setTimer}
-        />
+        />}
         {loadingNewGame && (
+          <div className="place-self-center mt-20">
           <Slab color="grey" size="medium" text="Dealing..." />
+          </div>
         )}
         <Tableau
           columns={columns}
@@ -363,7 +376,7 @@ function App() {
           dealt={dealt}
           handleRestartClick={handleRestartClick}
           loadingNewGame={loadingNewGame}
-          setGameFinished={setGameFinished}
+          endGame={endGame}
         />
       </PlayingBoard>
       <FinishedGameDialog gameFinished={gameFinished}/>
