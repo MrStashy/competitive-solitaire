@@ -2,6 +2,7 @@ import Stock from "./Stock";
 import WastePile from "./WastePile";
 import Foundation from "./Foundation";
 import { Foundations, PileOfCards } from "../utils/types";
+import { useEffect } from "react";
 
 type TopRowProps = {
   stockPile: PileOfCards
@@ -10,13 +11,25 @@ type TopRowProps = {
   foundations: Foundations
   score: number
   dealt: boolean
+  timer: number
+  setTimer: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function TopRow({ stockPile, wastePile, handleStockClick, foundations, score, dealt }: TopRowProps) {
+export default function TopRow({ stockPile, wastePile, handleStockClick, foundations, score, dealt, timer, setTimer }: TopRowProps) {
+
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    setTimer(prev => prev + 1);
+  }, 1000);
+
+  return () => clearInterval(intervalId);
+}, [])
+
+
   const foundationsKeys = Object.keys(foundations)
   return (
-    <header className="flex flex-row justify-between p-2 place-items-center">
-      <div className="flex flex-row gap-2 min-h-40">
+    <header className="flex flex-row justify-between p-2 place-items-center min-h-40">
+      <div className="flex flex-row gap-2 h-[140px]">
         <Stock stockPile={stockPile} handleStockClick={handleStockClick}/>
         <WastePile wastePile={wastePile} />
       </div>
@@ -24,7 +37,7 @@ export default function TopRow({ stockPile, wastePile, handleStockClick, foundat
       <p>Score</p>
       <p className="text-yellow-300">{score}</p>
       <p>Time</p>
-      <p className="text-yellow-300">00:00</p>
+      <p className="text-yellow-300">{timer}</p>
       </div>}
    
       <div className="flex flex-row gap-2 h-[140px]">

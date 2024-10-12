@@ -29,6 +29,7 @@ function App() {
   const [foundations, setFoundations] = useState<Foundations>({1: [], 2: [], 3: [], 4: []});
   const [loadingNewGame, setLoadingNewGame] = useState<boolean>(false)
   const [score, setScore] = useState<number>(0)
+  const [timer, setTimer] = useState<number>(0)
 
   async function handleNewGameClick() {
     setLoadingNewGame(true)
@@ -72,6 +73,7 @@ function App() {
     setDealt(true);
     setLoadingNewGame(false)
   }
+
 
   if (gameDeck.length && !dealt) {
     dealCards();
@@ -168,6 +170,7 @@ function App() {
     const colCopy = [...columns[Number(colNum)]];
     colCopy[colCopy.length - 1].revealed = true;
     setColumns({ ...columns });
+    setScore(prev => prev + 5)
   }
 
   function handleStockClick() {
@@ -256,6 +259,7 @@ function App() {
     markColumnGroups(destinationColCopy);
     setWastePile(wastePileCopy);
     setColumns({ ...columns, [destinationColNum]: destinationColCopy });
+    setScore(prev => prev + 5)
   }
 
   function handleDragToFoundation(draggedCardCode: string, overId: string) {
@@ -312,6 +316,7 @@ function App() {
 
     foundationsCopy[destinationFoundationNum].push(foundCardAndOrigin[1]);
     setFoundations({ ...foundationsCopy });
+    setScore(prev => prev + 10)
   }
 
   function handleRestartClick() {
@@ -321,6 +326,8 @@ function App() {
      setStockPile([])
      setFoundations({1: [], 2: [], 3: [], 4: []})
      setColumns({})
+     setScore(0)
+     setTimer(0)
      handleNewGameClick()
   }
 
@@ -334,6 +341,8 @@ function App() {
           foundations={foundations}
           score={score}
           dealt={dealt}
+          timer={timer}
+          setTimer={setTimer}
         />
         {loadingNewGame && <Slab color="grey" size="medium" text="Dealing..."/>}
         <Tableau
