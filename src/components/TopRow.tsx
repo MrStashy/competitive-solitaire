@@ -11,17 +11,21 @@ type TopRowProps = {
   foundations: Foundations
   score: number
   dealt: boolean
+  gameFinished: boolean
 }
 
-export default function TopRow({ stockPile, wastePile, handleStockClick, foundations, score, dealt }: TopRowProps) {
+export default function TopRow({ stockPile, wastePile, handleStockClick, foundations, score, dealt, gameFinished }: TopRowProps) {
   const [timer, setTimer] = useState(0)
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setTimer(prev => prev += 1)
+
+      if (!gameFinished) {
+        setTimer(prev => prev += 1)
+      }
     }, 1000);
     return () => clearInterval(intervalId);
-  }, [])
+  }, [gameFinished])
 
 
   const foundationsKeys = Object.keys(foundations)

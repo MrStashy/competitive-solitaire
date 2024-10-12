@@ -340,7 +340,7 @@ function App() {
   }
 
   function endGame() {
-    console.log('over')
+    setGameFinished(true)
   }
 
   useEffect(() => {
@@ -360,6 +360,7 @@ function App() {
           foundations={foundations}
           score={score}
           dealt={dealt}
+          gameFinished={gameFinished}
         />}
         {loadingNewGame && (
           <div className="place-self-center mt-20">
@@ -379,7 +380,7 @@ function App() {
           endGame={endGame}
         />
       </PlayingBoard>
-      <FinishedGameDialog gameFinished={gameFinished}/>
+      <FinishedGameDialog gameFinished={gameFinished} score={score} time={timerRef.current}/>
     </DndContext>
   );
 }
