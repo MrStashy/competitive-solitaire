@@ -324,10 +324,13 @@ function App() {
     foundationsCopy[destinationFoundationNum].push(foundCardAndOrigin[1]);
     setFoundations({ ...foundationsCopy });
     setScore((prev) => prev + 10);
+
+    if (Object.values(foundationsCopy).flat().length === 52){
+      console.log('game complete')
+    }
   }
 
   function handleRestartClick() {
-    console.log(timerRef.current)
     setDealt(!dealt);
     setDeck([]);
     setWastePile([]);
