@@ -103,7 +103,6 @@ function App() {
     let draggedCardIndex = 0;
 
     setCurrentlyDraggedCards([]);
-
     if (!over) {
       return;
     } else {
@@ -269,42 +268,44 @@ function App() {
     setScore((prev) => prev + 5);
   }
 
+
   function handleDragToFoundation(draggedCardCode: string, overId: string) {
-    let foundCardAndOrigin: [number, PlayingCard | undefined];
+    let foundDraggedCardAndOrigin: [number, PlayingCard | undefined];
     const wastePileCopy = [...wastePile];
     const columnsCopy = { ...columns };
     const foundationsCopy = { ...foundations };
-    const destinationFoundationNum = Number(overId[1]);
-
-    foundCardAndOrigin = [
+    const destinationFoundationNum = Number(overId[1]); 
+    foundDraggedCardAndOrigin = [
       0,
       wastePileCopy.find((card) => card.code === draggedCardCode),
     ];
 
-    if (!foundCardAndOrigin[1]) {
+    if (!foundDraggedCardAndOrigin[1]) {
       for (let i = 1; i < 8; i++) {
-        foundCardAndOrigin = [
+        foundDraggedCardAndOrigin = [
           i,
           columnsCopy[i].find((card) => card.code === draggedCardCode),
         ];
-        if (foundCardAndOrigin[1]) {
+        if (foundDraggedCardAndOrigin[1]) {
           break;
         }
       }
     }
-    if (!foundCardAndOrigin[1]) {
+
+
+    if (!foundDraggedCardAndOrigin[1]) {
       return;
     }
 
     const destinationFoundation = foundationsCopy[destinationFoundationNum];
     const destinationCard =
       destinationFoundation[destinationFoundation.length - 1];
-    const draggedCardRank = rankMap[foundCardAndOrigin[1].code[0]];
+    const draggedCardRank = rankMap[foundDraggedCardAndOrigin[1].code[0]];
 
     if (draggedCardRank !== 1) {
       const destinationCardRank = rankMap[destinationCard.code[0]];
       if (
-        foundCardAndOrigin[1].code[1] !== destinationCard.code[1] ||
+        foundDraggedCardAndOrigin[1].code[1] !== destinationCard.code[1] ||
         draggedCardRank - destinationCardRank !== 1 ||
         !destinationFoundation.length
       ) {
@@ -312,16 +313,19 @@ function App() {
       }
     }
 
-    if (foundCardAndOrigin[0] === 0) {
+    if (foundDraggedCardAndOrigin[0] === 0) {
+      if (destinationFoundation.length) {
+        return
+      }
       wastePileCopy.pop();
       setWastePile(wastePileCopy);
     } else {
-      columnsCopy[foundCardAndOrigin[0]].pop();
-      markColumnGroups(columnsCopy[foundCardAndOrigin[0]]);
+      columnsCopy[foundDraggedCardAndOrigin[0]].pop();
+      markColumnGroups(columnsCopy[foundDraggedCardAndOrigin[0]]);
       setColumns(columnsCopy);
     }
 
-    foundationsCopy[destinationFoundationNum].push(foundCardAndOrigin[1]);
+    foundationsCopy[destinationFoundationNum].push(foundDraggedCardAndOrigin[1]);
     setFoundations({ ...foundationsCopy });
     setScore((prev) => prev + 10);
 
