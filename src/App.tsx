@@ -326,11 +326,12 @@ function App() {
     setScore((prev) => prev + 10);
 
     if (Object.values(foundationsCopy).flat().length === 52){
-      console.log('game complete')
+      setGameFinished(true)
     }
   }
 
   function handleRestartClick() {
+    setGameFinished(false)
     setDealt(!dealt);
     setDeck([]);
     setWastePile([]);
@@ -383,7 +384,7 @@ function App() {
           endGame={endGame}
         />
       </PlayingBoard>
-      <FinishedGameDialog gameFinished={gameFinished} score={score} time={timerRef.current}/>
+      <FinishedGameDialog handleRestartClick={handleRestartClick} gameFinished={gameFinished} score={score} time={timerRef.current}/>
     </DndContext>
   );
 }
