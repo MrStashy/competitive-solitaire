@@ -314,7 +314,9 @@ function App() {
     }
 
     if (foundDraggedCardAndOrigin[0] === 0) {
-      if (destinationFoundation.length) {
+      console.log(draggedCardRank, destinationFoundation)
+      if (draggedCardRank === 1 && destinationFoundation.length) {
+        console.log('here')
         return
       }
       wastePileCopy.pop();
