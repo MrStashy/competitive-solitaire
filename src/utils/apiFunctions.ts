@@ -1,4 +1,5 @@
-import { PileOfCards, PlayingCard } from "./types"
+import { PileOfCards, PlayingCard, UserScore } from "./types"
+const apiUrl: string = import.meta.env.VITE_API_URL
 
 type NewGameResponseTypes = {
     deck_id: string
@@ -32,7 +33,18 @@ async function getNewDeck(): Promise<string> {
     return deck_id
 }
 
+async function getTop10Scores(): Promise<UserScore[]> {
+    const url = apiUrl + '/scores'
+    console.log(url)
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error("Error getting new deck")
+    }
+
+    const data = await response.json()
+    return data
+}
 
 
 
-export { getNewDeck, getNewFullDeck }
+export { getNewDeck, getNewFullDeck, getTop10Scores }

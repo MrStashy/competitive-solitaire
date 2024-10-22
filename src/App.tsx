@@ -4,7 +4,7 @@ import TopRow from "./components/TopRow";
 import Tableau from "./components/Tableau";
 import ControlModule from "./components/ControlModule";
 import rankMap from "./utils/cardRankMap";
-import { getNewDeck, getNewFullDeck } from "./utils/apiFunctions";
+import { getNewDeck, getNewFullDeck, getTop10Scores } from "./utils/apiFunctions";
 import { useState, useRef, useEffect } from "react";
 import {
   PileOfCards,
@@ -356,6 +356,11 @@ function App() {
     setGameFinished(true)
   }
 
+  async function handleLeaderBoardClick() {
+    const scores = await getTop10Scores()
+    console.log(scores)
+  }
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       timerRef.current += 1; 
@@ -391,6 +396,7 @@ function App() {
           handleRestartClick={handleRestartClick}
           loadingNewGame={loadingNewGame}
           endGame={endGame}
+          handleLeaderBoardClick={handleLeaderBoardClick}
         />
       </PlayingBoard>
       <FinishedGameDialog handleRestartClick={handleRestartClick} gameFinished={gameFinished} score={score} time={timerRef.current}/>

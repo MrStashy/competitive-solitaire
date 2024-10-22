@@ -21,3 +21,8 @@ export type TableauColumns = {
 export type Foundations = {
     [key: number]: PileOfCards
    }
+
+export type UserScore = {
+    username: string
+    score: number
+}
