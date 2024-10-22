@@ -292,7 +292,6 @@ function App() {
       }
     }
 
-
     if (!foundDraggedCardAndOrigin[1]) {
       return;
     }
@@ -303,6 +302,9 @@ function App() {
     const draggedCardRank = rankMap[foundDraggedCardAndOrigin[1].code[0]];
 
     if (draggedCardRank !== 1) {
+      if (!destinationCard) {
+        return
+      }
       const destinationCardRank = rankMap[destinationCard.code[0]];
       if (
         foundDraggedCardAndOrigin[1].code[1] !== destinationCard.code[1] ||
@@ -314,14 +316,15 @@ function App() {
     }
 
     if (foundDraggedCardAndOrigin[0] === 0) {
-      console.log(draggedCardRank, destinationFoundation)
-      if (draggedCardRank === 1 && destinationFoundation.length) {
-        console.log('here')
+      if (draggedCardRank === 1 && destinationCard) {
         return
       }
       wastePileCopy.pop();
       setWastePile(wastePileCopy);
     } else {
+      if (draggedCardRank === 1 && destinationCard) {
+        return
+      }
       columnsCopy[foundDraggedCardAndOrigin[0]].pop();
       markColumnGroups(columnsCopy[foundDraggedCardAndOrigin[0]]);
       setColumns(columnsCopy);
