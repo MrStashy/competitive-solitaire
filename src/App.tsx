@@ -364,15 +364,15 @@ function App() {
     const scores = await getTop10Scores()
     setLeaderboardShow(true)
     setScores(scores)
-
   }
 
   useEffect(() => {
+    timerRef.current = 0
     const intervalId = setInterval(() => {
       timerRef.current += 1; 
     }, 1000);
     return () => clearInterval(intervalId);
-  }, [loadingNewGame]) 
+  }, [loadingNewGame, dealt]) 
 
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>

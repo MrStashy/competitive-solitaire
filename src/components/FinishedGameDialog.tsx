@@ -9,6 +9,7 @@ type FinishedGameDialogProps = {
 }
 
 export default function FinishedGameDialog({gameFinished, time, score, handleRestartClick, handleLeaderboardClick}: FinishedGameDialogProps) {
+  const buttonStyle="bg-gradient-to-tr from-red-800 to-rose-500 border-2 p-4 rounded-lg text-white border-white shadow-md shadow-red-500/50 hover:shadow-none"
   return (
     <Dialog open={gameFinished} onClose={() => {}}>
       <DialogBackdrop className="fixed inset-0 bg-black/50" />
@@ -19,9 +20,9 @@ export default function FinishedGameDialog({gameFinished, time, score, handleRes
           <p>{`Your final score was ${score}.`}</p>
           <p>{`Your time was ${time} seconds.`}</p>
           <div className="flex flex-row gap-2">
-          <button className="bg-gradient-to-tr from-red-800 to-rose-500 border-2 p-4 rounded-lg text-white border-white shadow-md shadow-red-500/50 hover:shadow-none" onClick={handleRestartClick}>New Game</button>
-          <button className="bg-gradient-to-tr from-red-800 to-rose-500 border-2 p-4 rounded-lg text-white border-white shadow-md shadow-red-500/50 hover:shadow-none">Submit Score</button>
-          <button className="bg-gradient-to-tr from-red-800 to-rose-500 border-2 p-4 rounded-lg text-white border-white shadow-md shadow-red-500/50 hover:shadow-none" onClick={() => handleLeaderboardClick()}>Leaderboard</button>
+          <button className={buttonStyle} onClick={handleRestartClick}>New Game</button>
+          <button className={buttonStyle}>Submit Score</button>
+          <button className={buttonStyle} onClick={() => handleLeaderboardClick()}>Leaderboard</button>
           </div>
         </DialogPanel>
       </div>
