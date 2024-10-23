@@ -360,11 +360,11 @@ function App() {
     setGameFinished(true)
   }
 
-  async function handleLeaderBoardClick() {
+  async function handleLeaderboardClick() {
     const scores = await getTop10Scores()
     setLeaderboardShow(true)
     setScores(scores)
-    
+
   }
 
   useEffect(() => {
@@ -402,10 +402,10 @@ function App() {
           handleRestartClick={handleRestartClick}
           loadingNewGame={loadingNewGame}
           endGame={endGame}
-          handleLeaderBoardClick={handleLeaderBoardClick}
+          handleLeaderBoardClick={handleLeaderboardClick}
         />
       </PlayingBoard>
-      <FinishedGameDialog handleRestartClick={handleRestartClick} gameFinished={gameFinished} score={score} time={timerRef.current}/>
+      <FinishedGameDialog handleRestartClick={handleRestartClick} gameFinished={gameFinished} score={score} time={timerRef.current} handleLeaderboardClick={handleLeaderboardClick}/>
       <LeaderboardDialog leaderboardShow={leaderboardShow} setLeaderboardShow={setLeaderboardShow} scores={scores}/>
     </DndContext>
   );

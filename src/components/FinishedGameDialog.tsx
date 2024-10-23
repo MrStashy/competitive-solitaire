@@ -5,9 +5,10 @@ type FinishedGameDialogProps = {
     time: number
     score: number
     handleRestartClick: () => void
+    handleLeaderboardClick: () => void
 }
 
-export default function FinishedGameDialog({gameFinished, time, score, handleRestartClick}: FinishedGameDialogProps) {
+export default function FinishedGameDialog({gameFinished, time, score, handleRestartClick, handleLeaderboardClick}: FinishedGameDialogProps) {
   return (
     <Dialog open={gameFinished} onClose={() => {}}>
       <DialogBackdrop className="fixed inset-0 bg-black/50" />
@@ -20,6 +21,7 @@ export default function FinishedGameDialog({gameFinished, time, score, handleRes
           <div className="flex flex-row gap-2">
           <button className="bg-gradient-to-tr from-red-800 to-rose-500 border-2 p-4 rounded-lg text-white border-white shadow-md shadow-red-500/50 hover:shadow-none" onClick={handleRestartClick}>New Game</button>
           <button className="bg-gradient-to-tr from-red-800 to-rose-500 border-2 p-4 rounded-lg text-white border-white shadow-md shadow-red-500/50 hover:shadow-none">Submit Score</button>
+          <button className="bg-gradient-to-tr from-red-800 to-rose-500 border-2 p-4 rounded-lg text-white border-white shadow-md shadow-red-500/50 hover:shadow-none" onClick={() => handleLeaderboardClick()}>Leaderboard</button>
           </div>
         </DialogPanel>
       </div>
