@@ -35,7 +35,6 @@ async function getNewDeck(): Promise<string> {
 
 async function getTop10Scores(): Promise<UserScore[]> {
     const url = apiUrl + '/scores'
-    console.log(url)
     const response = await fetch(url)
     if (!response.ok) {
         throw new Error("Error getting new deck")

@@ -11,6 +11,7 @@ import {
   PlayingCard,
   TableauColumns,
   Foundations,
+  UserScore
 } from "./utils/types";
 import { DndContext, DragStartEvent } from "@dnd-kit/core";
 import { DragEndEvent } from "@dnd-kit/core";
@@ -18,6 +19,7 @@ import markColumnGroups from "./utils/markColumnGroups";
 import markRevealedCards from "./utils/markRevealedCards";
 import { Slab } from "react-loading-indicators";
 import FinishedGameDialog from "./components/FinishedGameDialog";
+import LeaderboardDialog from "./components/LeaderboardDialog";
 
 function App() {
   const [gameDeck, setDeck] = useState<PileOfCards>([]);
@@ -37,8 +39,10 @@ function App() {
   const [score, setScore] = useState<number>(0);
   // const [timer, setTimer] = useState<number>(0);
   const [gameFinished, setGameFinished] = useState<boolean>(false);
-  const timerRef = useRef(0)
+  const [leaderboardShow, setLeaderboardShow] = useState<boolean>(false);
+  const [scores, setScores] = useState<UserScore[]>([])
 
+  const timerRef = useRef(0)
   async function handleNewGameClick() {
     setLoadingNewGame(true);
     const newDeckId = await getNewDeck();
@@ -358,7 +362,9 @@ function App() {
 
   async function handleLeaderBoardClick() {
     const scores = await getTop10Scores()
-    console.log(scores)
+    setLeaderboardShow(true)
+    setScores(scores)
+    
   }
 
   useEffect(() => {
@@ -400,6 +406,7 @@ function App() {
         />
       </PlayingBoard>
       <FinishedGameDialog handleRestartClick={handleRestartClick} gameFinished={gameFinished} score={score} time={timerRef.current}/>
+      <LeaderboardDialog leaderboardShow={leaderboardShow} setLeaderboardShow={setLeaderboardShow} scores={scores}/>
     </DndContext>
   );
 }
