@@ -10,6 +10,7 @@ type LeaderboardDialogProps = {
 }
 
 export default function LeaderboardDialog ({leaderboardShow, setLeaderboardShow, scores}: LeaderboardDialogProps) {
+  console.log(scores)
 
     return (
         <Dialog open={leaderboardShow} onClose={() => setLeaderboardShow(false)}>
@@ -20,7 +21,8 @@ export default function LeaderboardDialog ({leaderboardShow, setLeaderboardShow,
             <DialogTitle className="font-bold">Leaderboard</DialogTitle>
             <ul>
                 {scores?.map((score, index) => {
-                    return <ScoreLi key={`${score.username}-${score.score}`} score={score} index={index} />
+                  console.log(score)
+                    return <ScoreLi key={`${score.username}-${score.finalScore}`} score={score} index={index} />
                 })}
             </ul>
           </DialogPanel>

@@ -24,5 +24,5 @@ export type Foundations = {
 
 export type UserScore = {
     username: string
-    score: number
+    finalScore: number
 }

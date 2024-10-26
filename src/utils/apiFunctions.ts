@@ -44,6 +44,22 @@ async function getTop10Scores(): Promise<UserScore[]> {
     return data
 }
 
+async function postUserAndScore(userScore: UserScore) {
+    const url = apiUrl + '/usernames'
+
+    try {
+        await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(userScore),
+            headers: {
+                "Content-Type": "application/json",
+              }
+        })
+    } catch (e) {
+        console.error(e)
+    }
+}
 
 
-export { getNewDeck, getNewFullDeck, getTop10Scores }
+
+export { getNewDeck, getNewFullDeck, getTop10Scores, postUserAndScore }

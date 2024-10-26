@@ -1,6 +1,6 @@
 import { Dialog, DialogPanel, DialogTitle, DialogBackdrop } from '@headlessui/react'
 import { useState } from 'react'
-import { UserScore } from '../utils/types'
+import { postUserAndScore } from '../utils/apiFunctions'
 
 type FinishedGameDialogProps = {
     gameFinished: boolean
@@ -54,17 +54,25 @@ type SubmitScoreInputProps = {
 }
 
 function SubmitScoreInput({getFinalScore}: SubmitScoreInputProps) {
-  const [username, setUsername] = useState<UserScore>({})
+  const [username, setUsername] = useState<string>('')
 
-  
+  async function handleSubmitScore() {
+    const userScore = {
+      username: username,
+      finalScore: getFinalScore()
+    }
 
-  function handleSubmitScore() {
-    console.log(getFinalScore())
+   await postUserAndScore(userScore)
+  }
+
+  function handleChange (e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target
+    setUsername(value)
   }
 
   return (
     <div className="flex flex-row gap-2">
-    <input placeholder="Your name" className="rounded border-2 border-black px-2" />
+    <input placeholder="Your name" className="rounded border-2 border-black px-2" onChange={handleChange} value={username} />
     <button onClick={handleSubmitScore} className="bg-gradient-to-tr from-red-800 to-rose-500 border-2 px-4 text-xs rounded-lg text-white border-white shadow-md shadow-red-500/50 hover:shadow-none">Submit</button>
     </div>
   )
