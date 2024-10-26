@@ -4,14 +4,18 @@ import TopRow from "./components/TopRow";
 import Tableau from "./components/Tableau";
 import ControlModule from "./components/ControlModule";
 import rankMap from "./utils/cardRankMap";
-import { getNewDeck, getNewFullDeck, getTop10Scores } from "./utils/apiFunctions";
+import {
+  getNewDeck,
+  getNewFullDeck,
+  getTop10Scores,
+} from "./utils/apiFunctions";
 import { useState, useRef, useEffect } from "react";
 import {
   PileOfCards,
   PlayingCard,
   TableauColumns,
   Foundations,
-  UserScore
+  UserScore,
 } from "./utils/types";
 import { DndContext, DragStartEvent } from "@dnd-kit/core";
 import { DragEndEvent } from "@dnd-kit/core";
@@ -37,12 +41,12 @@ function App() {
   });
   const [loadingNewGame, setLoadingNewGame] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
-  // const [timer, setTimer] = useState<number>(0);
   const [gameFinished, setGameFinished] = useState<boolean>(false);
   const [leaderboardShow, setLeaderboardShow] = useState<boolean>(false);
-  const [scores, setScores] = useState<UserScore[]>([])
+  const [scores, setScores] = useState<UserScore[]>([]);
+  const [victory, setVictory] = useState<boolean>(false)
 
-  const timerRef = useRef(0)
+  const timerRef = useRef(0);
   async function handleNewGameClick() {
     setLoadingNewGame(true);
     const newDeckId = await getNewDeck();
@@ -272,13 +276,12 @@ function App() {
     setScore((prev) => prev + 5);
   }
 
-
   function handleDragToFoundation(draggedCardCode: string, overId: string) {
     let foundDraggedCardAndOrigin: [number, PlayingCard | undefined];
     const wastePileCopy = [...wastePile];
     const columnsCopy = { ...columns };
     const foundationsCopy = { ...foundations };
-    const destinationFoundationNum = Number(overId[1]); 
+    const destinationFoundationNum = Number(overId[1]);
     foundDraggedCardAndOrigin = [
       0,
       wastePileCopy.find((card) => card.code === draggedCardCode),
@@ -307,7 +310,7 @@ function App() {
 
     if (draggedCardRank !== 1) {
       if (!destinationCard) {
-        return
+        return;
       }
       const destinationCardRank = rankMap[destinationCard.code[0]];
       if (
@@ -321,30 +324,33 @@ function App() {
 
     if (foundDraggedCardAndOrigin[0] === 0) {
       if (draggedCardRank === 1 && destinationCard) {
-        return
+        return;
       }
       wastePileCopy.pop();
       setWastePile(wastePileCopy);
     } else {
       if (draggedCardRank === 1 && destinationCard) {
-        return
+        return;
       }
       columnsCopy[foundDraggedCardAndOrigin[0]].pop();
       markColumnGroups(columnsCopy[foundDraggedCardAndOrigin[0]]);
       setColumns(columnsCopy);
     }
 
-    foundationsCopy[destinationFoundationNum].push(foundDraggedCardAndOrigin[1]);
+    foundationsCopy[destinationFoundationNum].push(
+      foundDraggedCardAndOrigin[1]
+    );
     setFoundations({ ...foundationsCopy });
     setScore((prev) => prev + 10);
 
-    if (Object.values(foundationsCopy).flat().length === 52){
-      setGameFinished(true)
+    if (Object.values(foundationsCopy).flat().length === 52) {
+      setVictory(true);
+      setGameFinished(true);
     }
   }
 
   function handleRestartClick() {
-    setGameFinished(false)
+    setGameFinished(false);
     setDealt(!dealt);
     setDeck([]);
     setWastePile([]);
@@ -352,43 +358,45 @@ function App() {
     setFoundations({ 1: [], 2: [], 3: [], 4: [] });
     setColumns({});
     setScore(0);
-    timerRef.current = 0
+    timerRef.current = 0;
     handleNewGameClick();
   }
 
   function endGame() {
-    setGameFinished(true)
+    setGameFinished(true);
   }
 
   async function handleLeaderboardClick() {
-    const scores = await getTop10Scores()
-    setLeaderboardShow(true)
-    setScores(scores)
+    const scores = await getTop10Scores();
+    setLeaderboardShow(true);
+    setScores(scores);
   }
 
   useEffect(() => {
-    timerRef.current = 0
+    timerRef.current = 0;
     const intervalId = setInterval(() => {
-      timerRef.current += 1; 
+      timerRef.current += 1;
     }, 1000);
     return () => clearInterval(intervalId);
-  }, [loadingNewGame, dealt]) 
+  }, [loadingNewGame, dealt]);
 
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <PlayingBoard>
-        {!loadingNewGame && dealt && <TopRow
-          stockPile={stockPile}
-          wastePile={wastePile}
-          handleStockClick={handleStockClick}
-          foundations={foundations}
-          score={score}
-          dealt={dealt}
-          gameFinished={gameFinished}
-        />}
+        {!loadingNewGame && dealt && (
+          <TopRow
+            stockPile={stockPile}
+            wastePile={wastePile}
+            handleStockClick={handleStockClick}
+            foundations={foundations}
+            score={score}
+            dealt={dealt}
+            gameFinished={gameFinished}
+          />
+        )}
         {loadingNewGame && (
           <div className="place-self-center mt-20">
-          <Slab color="grey" size="medium" text="Dealing..." />
+            <Slab color="grey" size="medium" text="Dealing..." />
           </div>
         )}
         <Tableau
@@ -405,8 +413,19 @@ function App() {
           handleLeaderBoardClick={handleLeaderboardClick}
         />
       </PlayingBoard>
-      <FinishedGameDialog handleRestartClick={handleRestartClick} gameFinished={gameFinished} score={score} time={timerRef.current} handleLeaderboardClick={handleLeaderboardClick}/>
-      <LeaderboardDialog leaderboardShow={leaderboardShow} setLeaderboardShow={setLeaderboardShow} scores={scores}/>
+      <FinishedGameDialog
+        handleRestartClick={handleRestartClick}
+        gameFinished={gameFinished}
+        score={score}
+        time={timerRef.current}
+        handleLeaderboardClick={handleLeaderboardClick}
+        victory={victory}
+      />
+      <LeaderboardDialog
+        leaderboardShow={leaderboardShow}
+        setLeaderboardShow={setLeaderboardShow}
+        scores={scores}
+      />
     </DndContext>
   );
 }
