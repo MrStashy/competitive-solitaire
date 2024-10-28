@@ -351,6 +351,7 @@ function App() {
 
   function handleRestartClick() {
     setGameFinished(false);
+    setVictory(false);
     setDealt(!dealt);
     setDeck([]);
     setWastePile([]);
@@ -373,12 +374,15 @@ function App() {
   }
 
   useEffect(() => {
-    timerRef.current = 0;
-    const intervalId = setInterval(() => {
-      timerRef.current += 1;
-    }, 1000);
-    return () => clearInterval(intervalId);
-  }, [loadingNewGame, dealt]);
+    if (!gameFinished) {
+      timerRef.current = 0;
+      const intervalId = setInterval(() => {
+          timerRef.current += 1;
+  
+      }, 1000);
+      return () => clearInterval(intervalId);
+    }
+  }, [loadingNewGame, dealt, gameFinished]);
 
   return (
     <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>

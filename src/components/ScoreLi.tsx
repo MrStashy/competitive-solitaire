@@ -7,8 +7,6 @@ type ScoreProps = {
 
 export default function ScoreLi ({score, index}: ScoreProps) {
 
-    console.log(score)
-
     return (
         <li className="flex flex-row justify-between w-56">
             <div className="flex flex-row gap-4">
