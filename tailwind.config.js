@@ -24,7 +24,7 @@ export default {
         gradient: 'gradient 15s ease infinite',
       },
     screens: {
-      'lg': '750px'
+      'lg': '830px'
     }
   },
   plugins: [],

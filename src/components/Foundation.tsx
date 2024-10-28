@@ -21,6 +21,6 @@ export default function Foundation({ foundationCards, foundationNum }: Foundatio
     }
 
     return (
-            <p className="lg:w-[100px] w-[60px] lg:h-[140px] rounded-md border-2" ref={setNodeRef}></p>      
+            <p className="lg:w-[100px] w-[60px] h-[90px] lg:h-[140px] rounded-md border-2" ref={setNodeRef}></p>      
     )
 }
