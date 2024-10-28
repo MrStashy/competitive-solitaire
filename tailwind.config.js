@@ -23,6 +23,9 @@ export default {
       animation: {
         gradient: 'gradient 15s ease infinite',
       },
+    screens: {
+      'lg': '750px'
+    }
   },
   plugins: [],
 }

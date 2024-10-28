@@ -30,8 +30,8 @@ export default function TopRow({ stockPile, wastePile, handleStockClick, foundat
 
   const foundationsKeys = Object.keys(foundations)
   return (
-    <header className="flex flex-row justify-between p-2 place-items-center min-h-40">
-      <div className="flex flex-row gap-2 h-[140px]">
+    <header className="flex flex-row justify-between p-2 place-items-center h-[150px]">
+      <div className="flex flex-row gap-2">
         <Stock stockPile={stockPile} handleStockClick={handleStockClick}/>
         <WastePile wastePile={wastePile} />
       </div>
@@ -42,7 +42,7 @@ export default function TopRow({ stockPile, wastePile, handleStockClick, foundat
       <p className="text-yellow-300">{timer}</p>
       </div>}
    
-      <div className="flex flex-row gap-2 h-[140px]">
+      <div className="flex flex-row gap-2">
         {foundationsKeys.map((foundationNum) => {
           return (
               <Foundation foundationCards={foundations[Number(foundationNum)]} key={foundationNum} foundationNum={Number(foundationNum)}/>
