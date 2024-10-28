@@ -6,7 +6,7 @@ type StockProps = {
 };
 
 export default function Stock({ stockPile, handleStockClick }: StockProps) {
-  const style = stockPile.length ? "relative w-[100px] h-[140px]" : "border-2 rounded-md w-[100px] h-[140px]";
+  const style = stockPile.length ? "relative lg:h-[140px] h-[90px]" : "border-2 rounded-md lg:h-[140px] lg:w-[100px] h-[90px] w-[60px]";
 
   if (stockPile.length) {
     return (

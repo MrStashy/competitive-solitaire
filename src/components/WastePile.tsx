@@ -6,7 +6,7 @@ type WastePileProps = {
 };
 
 export default function WastePile({ wastePile }: WastePileProps) {
-  let style = "relative min-w-[100px]";
+  let style = "relative lg:h-[140px] lg:w-[100px] w-[65px]";
   let cardsToDisplay;
 
   if (!wastePile.length) {
