@@ -47,6 +47,7 @@ function App() {
   const [victory, setVictory] = useState<boolean>(false)
 
   const timerRef = useRef(0);
+
   async function handleNewGameClick() {
     setLoadingNewGame(true);
     const newDeckId = await getNewDeck();
@@ -59,6 +60,8 @@ function App() {
     const newStockPile: PileOfCards = [];
     const newColumns: TableauColumns = {};
     const newFoundations: Foundations = {};
+
+    console.log(deckCopy)
 
     for (let i = 0; i < 24; i++) {
       const card = deckCopy.shift();
