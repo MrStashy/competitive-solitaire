@@ -1,6 +1,7 @@
 import { Dialog, DialogPanel, DialogTitle, DialogBackdrop } from '@headlessui/react'
 import { useState } from 'react'
 import { postUserAndScore } from '../utils/apiFunctions'
+import { Dispatch, SetStateAction } from 'react'
 
 type FinishedGameDialogProps = {
     gameFinished: boolean
@@ -15,6 +16,7 @@ export default function FinishedGameDialog({gameFinished, time, score, handleRes
   const [showSubmitInput, setShowSubmitInput] = useState<boolean>(false)
 
   const buttonStyle="bg-gradient-to-tr from-red-800 to-rose-500 border-2 p-4 rounded-lg text-white border-white shadow-md shadow-red-500/50 hover:shadow-none"
+
 
   function getFinalScore() {
     let finalScore: number = (600 - time) * (score * 10)
@@ -42,7 +44,7 @@ export default function FinishedGameDialog({gameFinished, time, score, handleRes
           <button className={buttonStyle} onClick={() => setShowSubmitInput(!showSubmitInput)}>{showSubmitInput ? "Cancel Submit" : "Submit Score"}</button>
           <button className={buttonStyle} onClick={() => handleLeaderboardClick()}>Leaderboard</button>
           </div>
-          {showSubmitInput ? <SubmitScoreInput getFinalScore={getFinalScore}/>: null}
+          {showSubmitInput ? <SubmitScoreInput getFinalScore={getFinalScore} setShowSubmitInput={setShowSubmitInput}/>: null}
         </DialogPanel>
       </div>
     </Dialog>
@@ -51,9 +53,10 @@ export default function FinishedGameDialog({gameFinished, time, score, handleRes
 
 type SubmitScoreInputProps = {
   getFinalScore: () => number
+  setShowSubmitInput: Dispatch<SetStateAction<boolean>>
 }
 
-function SubmitScoreInput({getFinalScore}: SubmitScoreInputProps) {
+function SubmitScoreInput({getFinalScore, setShowSubmitInput}: SubmitScoreInputProps) {
   const [username, setUsername] = useState<string>('')
 
   async function handleSubmitScore() {
@@ -62,7 +65,11 @@ function SubmitScoreInput({getFinalScore}: SubmitScoreInputProps) {
       finalScore: getFinalScore()
     }
 
-   await postUserAndScore(userScore)
+    if (userScore.finalScore > 0) {
+      await postUserAndScore(userScore)
+    }
+
+   setShowSubmitInput(false)
   }
 
   function handleChange (e: React.ChangeEvent<HTMLInputElement>) {
