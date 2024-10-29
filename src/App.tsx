@@ -24,6 +24,7 @@ import markRevealedCards from "./utils/markRevealedCards";
 import { Slab } from "react-loading-indicators";
 import FinishedGameDialog from "./components/FinishedGameDialog";
 import LeaderboardDialog from "./components/LeaderboardDialog";
+import { cards } from "./utils/cardDeck";
 
 function App() {
   const [gameDeck, setDeck] = useState<PileOfCards>([]);
@@ -60,8 +61,6 @@ function App() {
     const newStockPile: PileOfCards = [];
     const newColumns: TableauColumns = {};
     const newFoundations: Foundations = {};
-
-    console.log(deckCopy)
 
     for (let i = 0; i < 24; i++) {
       const card = deckCopy.shift();

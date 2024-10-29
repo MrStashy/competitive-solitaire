@@ -30,7 +30,7 @@ export default function TableauColumn({
 
   return (
     <div
-      className="flex flex-col relative h-[400px] w-[100px]"
+      className="flex flex-col relative w-[65px] lg:w-[100px]"
       ref={setNodeRef}
     >
       {cards.map((card, index) => {
