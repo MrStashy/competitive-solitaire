@@ -19,9 +19,9 @@ export default function LeaderboardDialog ({leaderboardShow, setLeaderboardShow,
           <DialogPanel className="max-w-lg space-y-4 bg-white/80 p-12 rounded-md border-black border-2 flex-col flex no-margin gap-4 place-items-center">
             <DialogTitle className="font-bold">Leaderboard</DialogTitle>
             <ul>
-                {scores?.map((score, index) => {
+                {scores.length ? scores.map((score, index) => {
                     return <ScoreLi key={`${score.username}-${score.finalScore}`} score={score} index={index} />
-                })}
+                }) : <p>Loading...</p>}
             </ul>
           </DialogPanel>
         </div>

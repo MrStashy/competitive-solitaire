@@ -24,7 +24,6 @@ import markRevealedCards from "./utils/markRevealedCards";
 import { Slab } from "react-loading-indicators";
 import FinishedGameDialog from "./components/FinishedGameDialog";
 import LeaderboardDialog from "./components/LeaderboardDialog";
-import { cards } from "./utils/cardDeck";
 
 function App() {
   const [gameDeck, setDeck] = useState<PileOfCards>([]);
@@ -370,8 +369,8 @@ function App() {
   }
 
   async function handleLeaderboardClick() {
-    const scores = await getTop10Scores();
     setLeaderboardShow(true);
+    const scores = await getTop10Scores();
     setScores(scores);
   }
 
