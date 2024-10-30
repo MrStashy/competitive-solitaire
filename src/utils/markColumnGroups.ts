@@ -27,7 +27,8 @@ export default function markColumnGroups(column: PileOfCards) {
 
     if (
       currentCardIsBlack !== subsequentCardIsBlack &&
-      currentCardRank - subsequentCardRank === 1
+      currentCardRank - subsequentCardRank === 1 &&
+      subsequentCard.draggableGroup
     ) {
       const draggableGroup = [subsequentCard, ...subsequentCard.draggableGroup];
       currentCard.draggableGroup = draggableGroup;
