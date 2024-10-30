@@ -7,9 +7,9 @@ export type PlayingCard = {
     }
     value: string
     suit: string
-    draggableGroup: PileOfCards
-    revealed: boolean
-    draggable: boolean
+    draggableGroup?: PileOfCards
+    revealed?: boolean
+    draggable?: boolean 
 }
 
 export type PileOfCards = PlayingCard[]

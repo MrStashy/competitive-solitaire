@@ -5,8 +5,6 @@ import Tableau from "./components/Tableau";
 import ControlModule from "./components/ControlModule";
 import rankMap from "./utils/cardRankMap";
 import {
-  getNewDeck,
-  getNewFullDeck,
   getTop10Scores,
 } from "./utils/apiFunctions";
 import { useState, useRef, useEffect } from "react";
@@ -24,6 +22,7 @@ import markRevealedCards from "./utils/markRevealedCards";
 import { Slab } from "react-loading-indicators";
 import FinishedGameDialog from "./components/FinishedGameDialog";
 import LeaderboardDialog from "./components/LeaderboardDialog";
+import { cards } from "./utils/cardDeck";
 
 function App() {
   const [gameDeck, setDeck] = useState<PileOfCards>([]);
@@ -50,9 +49,17 @@ function App() {
 
   async function handleNewGameClick() {
     setLoadingNewGame(true);
-    const newDeckId = await getNewDeck();
-    const deck = await getNewFullDeck(newDeckId);
-    setDeck(deck);
+    const newDeck = shuffle(cards);;
+    setDeck(newDeck);
+  }
+
+
+  function shuffle (array: PileOfCards) {
+    for (let i = array.length - 1; i >= 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; 
+    }
+    return array
   }
 
   function dealCards() {
@@ -152,7 +159,7 @@ function App() {
     const draggedCard = originatingCol.find(
       (card) => card.code === draggedCardCode
     );
-    if (draggedCard) {
+    if (draggedCard && draggedCard.draggableGroup) {
       numOfDraggedCards = draggedCard.draggableGroup.length + 1;
       draggedCardIndex = originatingCol.indexOf(draggedCard);
     }
@@ -180,11 +187,16 @@ function App() {
   function handleTableauColClick(e: React.MouseEvent<HTMLImageElement>) {
     const target = e.target as HTMLImageElement;
     const { id } = target;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, colNum] = id.split("-");
+
     const colCopy = [...columns[Number(colNum)]];
-    colCopy[colCopy.length - 1].revealed = true;
-    setColumns({ ...columns });
+    
+    colCopy[colCopy.length - 1] = {
+      ...colCopy[colCopy.length - 1],
+      revealed: true,
+    };
+  
+    setColumns({ ...columns, [colNum]: colCopy });
     setScore((prev) => prev + 5);
   }
 
@@ -232,7 +244,7 @@ function App() {
     }
 
     const currentlyDraggedCards = [card].concat(
-      colCopy.splice(indexOfCard + 1, card.draggableGroup.length + 1)
+      colCopy.splice(indexOfCard + 1, (card.draggableGroup?.length ?? 0) + 1)
     );
 
     setCurrentlyDraggedCards(currentlyDraggedCards);
