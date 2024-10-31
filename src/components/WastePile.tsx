@@ -30,6 +30,7 @@ export default function WastePile({ wastePile }: WastePileProps) {
           } else {
             card.draggable = false;
           }
+          card.draggableGroup = []
           return (
             <CardComponent
               card={card}

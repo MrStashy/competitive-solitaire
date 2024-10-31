@@ -23,7 +23,6 @@ export default function TopRow({
   dealt,
   gameFinished,
 }: TopRowProps) {
-  console.log('top row rerendered')
 
 
   const foundationsKeys = Object.keys(foundations);

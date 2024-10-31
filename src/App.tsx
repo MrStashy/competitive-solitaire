@@ -187,6 +187,7 @@ function App() {
   function handleTableauColClick(e: React.MouseEvent<HTMLImageElement>) {
     const target = e.target as HTMLImageElement;
     const { id } = target;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_, colNum] = id.split("-");
 
     const colCopy = [...columns[Number(colNum)]];

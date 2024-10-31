@@ -8,6 +8,8 @@ type TableauProps = {
 };
 
 export default function Tableau({ columns, handleTableauColClick, currentlyDraggedCards }: TableauProps) {
+
+  console.log('tableau rerendered')
   return (
     <div className="flex flex-row justify-around p-2 gap-2 mx-4 flex-grow">
       {Object.keys(columns).map((columnNo) => {
