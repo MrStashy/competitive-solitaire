@@ -23,7 +23,7 @@ export default function TableauColumn({
     return (
       <div
         ref={setNodeRef}
-        className="border-2 rounded-md h-36 w-[100px]"
+        className="border-2 rounded-md h-[90px] w-[65px] lg:w-[100px] lg:h-[140px]"
       ></div>
     );
   }
