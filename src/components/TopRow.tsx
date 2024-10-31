@@ -1,56 +1,50 @@
 import Stock from "./Stock";
 import WastePile from "./WastePile";
 import Foundation from "./Foundation";
+import ScoreTimer from "./ScoreTimer";
 import { Foundations, PileOfCards } from "../utils/types";
-import { useEffect, useState } from "react";
 
 type TopRowProps = {
-  stockPile: PileOfCards
-  wastePile: PileOfCards
-  handleStockClick: (e: React.MouseEvent<HTMLImageElement>) => void
-  foundations: Foundations
-  score: number
-  dealt: boolean
-  gameFinished: boolean
-}
+  stockPile: PileOfCards;
+  wastePile: PileOfCards;
+  handleStockClick: (e: React.MouseEvent<HTMLImageElement>) => void;
+  foundations: Foundations;
+  score: number;
+  dealt: boolean;
+  gameFinished: boolean;
+};
 
-export default function TopRow({ stockPile, wastePile, handleStockClick, foundations, score, dealt, gameFinished }: TopRowProps) {
-  const [timer, setTimer] = useState(0)
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-
-      if (!gameFinished) {
-        setTimer(prev => prev += 1)
-      }
-    }, 1000);
-    return () => clearInterval(intervalId);
-  }, [gameFinished])
+export default function TopRow({
+  stockPile,
+  wastePile,
+  handleStockClick,
+  foundations,
+  score,
+  dealt,
+  gameFinished,
+}: TopRowProps) {
 
 
-  const foundationsKeys = Object.keys(foundations)
+  const foundationsKeys = Object.keys(foundations);
   return (
     <header className="flex flex-row justify-between p-2 place-items-center lg:h-[150px] h-[100px]">
       <div className="flex flex-row gap-2">
-        <Stock stockPile={stockPile} handleStockClick={handleStockClick}/>
+        <Stock stockPile={stockPile} handleStockClick={handleStockClick} />
         <WastePile wastePile={wastePile} />
       </div>
-      {dealt && <div className="bg-slate-500/50 lg:h-auto p-2 rounded-md place-items-center flex flex-col w-[50px] h-[90px] lg:w-[80px] animate-gradient bg-[length:200%_200%] text-white border-2 text-xs lg:text-base">
-      <p>Score</p>
-      <p className="text-yellow-300">{score}</p>
-      <p>Time</p>
-      <p className="text-yellow-300">{timer}</p>
-      </div>}
-   
+      {dealt && <ScoreTimer gameFinished={gameFinished} score={score} />}
+
       <div className="flex flex-row gap-2">
         {foundationsKeys.map((foundationNum) => {
           return (
-              <Foundation foundationCards={foundations[Number(foundationNum)]} key={foundationNum} foundationNum={Number(foundationNum)}/>
-          )
+            <Foundation
+              foundationCards={foundations[Number(foundationNum)]}
+              key={foundationNum}
+              foundationNum={Number(foundationNum)}
+            />
+          );
         })}
       </div>
     </header>
   );
 }
-
-

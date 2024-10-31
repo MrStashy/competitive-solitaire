@@ -34,6 +34,7 @@ export default function TableauColumn({
       ref={setNodeRef}
     >
       {cards.map((card, index) => {
+      
         return (
           <CardComponent
             cards={cards}

@@ -200,6 +200,7 @@ function App() {
     setScore((prev) => prev + 5);
   }
 
+
   function handleStockClick() {
     const stockCopy = [...stockPile];
     const wasteCopy = [...wastePile];
